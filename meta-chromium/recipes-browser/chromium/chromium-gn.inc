@@ -19,6 +19,8 @@ SRC_URI += " \
     file://0010-avoid-link-latomic-failure-on-CentOS-8-host.patch \
     file://0012-Fix-font-rendering-with-glibc-2.33.patch \
     file://0001-nomerge-attribute-on-declaration-is-only-available-s.patch \
+    file://0001-Add-missing-include.patch \
+    file://0002-Enable-to-build-against-missing-DRM_FORMAT_P010-linu.patch \
 "
 
 SRC_URI_append_libc-musl = "\
