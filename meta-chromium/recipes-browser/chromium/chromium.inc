@@ -24,7 +24,7 @@ TOOLCHAIN_class-native = "clang"
 # https://github.com/kraj/meta-clang/issues/449).
 RUNTIME = "llvm"
 
-inherit mime-xdg pythonnative
+inherit pythonnative
 DEPENDS += "python-setuptools-native"
 
 # Chromium itself is licensed under the 3-clause BSD license. However, it
