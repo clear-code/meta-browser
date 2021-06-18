@@ -1,0 +1,36 @@
+From 9822dc0815978eec35adeb883aa604f0e60be2f6 Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Fri, 18 Jun 2021 14:34:14 +0900
+Subject: [PATCH 4/4] [ozone/wayland] Add nullptr check on activate/deactivate
+ of text_input
+
+Signed-off-by: Takuro Ashie <ashie@clear-code.com>
+---
+ .../platform/wayland/host/zwp_text_input_wrapper_v1.cc    | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/ui/ozone/platform/wayland/host/zwp_text_input_wrapper_v1.cc b/ui/ozone/platform/wayland/host/zwp_text_input_wrapper_v1.cc
+index 456b19474f1f..24d6d5200717 100644
+--- a/ui/ozone/platform/wayland/host/zwp_text_input_wrapper_v1.cc
++++ b/ui/ozone/platform/wayland/host/zwp_text_input_wrapper_v1.cc
+@@ -58,12 +58,14 @@ void ZWPTextInputWrapperV1::Reset() {
+ }
+ 
+ void ZWPTextInputWrapperV1::Activate(WaylandWindow* window) {
+-  zwp_text_input_v1_activate(obj_.get(), connection_->seat(),
+-                             window->root_surface()->surface());
++  if (connection_->seat())
++    zwp_text_input_v1_activate(obj_.get(), connection_->seat(),
++                               window->root_surface()->surface());
+ }
+ 
+ void ZWPTextInputWrapperV1::Deactivate() {
+-  zwp_text_input_v1_deactivate(obj_.get(), connection_->seat());
++  if (connection_->seat())
++    zwp_text_input_v1_deactivate(obj_.get(), connection_->seat());
+ }
+ 
+ void ZWPTextInputWrapperV1::ShowInputPanel() {
+-- 
+2.30.2
+

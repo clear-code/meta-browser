@@ -1,0 +1,35 @@
+From ad5da0a360b625456e593b491f6101ffff3a80ad Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Thu, 10 Jun 2021 15:28:05 +0900
+Subject: [PATCH 3/4] Fix build error of ui/base/clipboard on use_ozone
+
+Signed-off-by: Takuro Ashie <ashie@clear-code.com>
+---
+ ui/base/clipboard/BUILD.gn | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/ui/base/clipboard/BUILD.gn b/ui/base/clipboard/BUILD.gn
+index 6e806368add5..1bf728f47a7a 100644
+--- a/ui/base/clipboard/BUILD.gn
++++ b/ui/base/clipboard/BUILD.gn
+@@ -135,6 +135,8 @@ component("clipboard") {
+       sources += [ "clipboard_linux.cc" ]
+       if (use_ozone) {
+         sources += [
++          "clipboard_data.cc",
++          "clipboard_data.h",
+           "clipboard_ozone.cc",
+           "clipboard_ozone.h",
+         ]
+@@ -243,7 +245,7 @@ source_set("clipboard_test") {
+     ]
+   }
+ 
+-  if (use_aura && !is_chromeos_lacros && !use_x11 && !is_win) {
++  if (use_aura && !is_chromeos_lacros && !use_x11 && !is_win && !use_ozone) {
+     sources += [
+       "clipboard_data_unittest.cc",
+       "clipboard_non_backed_unittest.cc",
+-- 
+2.30.2
+

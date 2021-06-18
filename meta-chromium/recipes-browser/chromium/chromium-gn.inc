@@ -21,6 +21,8 @@ SRC_URI += " \
     file://0001-nomerge-attribute-on-declaration-is-only-available-s.patch \
     file://0001-Add-missing-include.patch \
     file://0002-Enable-to-build-against-missing-DRM_FORMAT_P010-linu.patch \
+    file://0003-Fix-build-error-of-ui-base-clipboard-on-use_ozone.patch \
+    file://0004-ozone-wayland-Add-nullptr-check-on-activate-deactiva.patch \
 "
 
 SRC_URI_append_libc-musl = "\
