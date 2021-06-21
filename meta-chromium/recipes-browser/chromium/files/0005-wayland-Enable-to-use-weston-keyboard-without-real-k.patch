@@ -1,0 +1,27 @@
+From 1e75d8ed49f369c7693aa76b3852990f5ec13a65 Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Mon, 21 Jun 2021 15:07:37 +0900
+Subject: [PATCH 5/5] wayland: Enable to use weston-keyboard without real
+ keyboard
+
+Signed-off-by: Takuro Ashie <ashie@clear-code.com>
+---
+ ui/ozone/platform/wayland/host/wayland_input_method_context.cc | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/ui/ozone/platform/wayland/host/wayland_input_method_context.cc b/ui/ozone/platform/wayland/host/wayland_input_method_context.cc
+index b7e3c6b3238f..e282b65e29ff 100644
+--- a/ui/ozone/platform/wayland/host/wayland_input_method_context.cc
++++ b/ui/ozone/platform/wayland/host/wayland_input_method_context.cc
+@@ -157,6 +157,8 @@ void WaylandInputMethodContext::Reset() {
+ void WaylandInputMethodContext::Focus() {
+   WaylandWindow* window =
+       connection_->wayland_window_manager()->GetCurrentKeyboardFocusedWindow();
++  if (!window && !connection_->keyboard())
++      window = connection_->wayland_window_manager()->GetCurrentFocusedWindow();
+   if (!text_input_ || !window)
+     return;
+ 
+-- 
+2.30.2
+

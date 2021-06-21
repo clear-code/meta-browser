@@ -1,7 +1,7 @@
 From fc02104bfd5cd382649d35d1b967420b453883a9 Mon Sep 17 00:00:00 2001
 From: Takuro Ashie <ashie@clear-code.com>
 Date: Tue, 8 Jun 2021 13:45:17 +0900
-Subject: [PATCH 1/4] Add missing include
+Subject: [PATCH 1/5] Add missing include
 
 Signed-off-by: Takuro Ashie <ashie@clear-code.com>
 ---
