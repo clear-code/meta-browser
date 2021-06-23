@@ -23,7 +23,8 @@ SRC_URI += " \
     file://0002-Enable-to-build-against-missing-DRM_FORMAT_P010-linu.patch \
     file://0003-Fix-build-error-of-ui-base-clipboard-on-use_ozone.patch \
     file://0004-ozone-wayland-Add-nullptr-check-on-activate-deactiva.patch \
-    file://0005-wayland-Enable-to-use-weston-keyboard-without-real-k.patch \
+    file://0005-ozone-wayland-Enable-to-use-weston-keyboard-without-.patch \
+    file://0006-ozone-wayland-Apply-default-preedit-style-if-empty-s.patch \
 "
 
 SRC_URI_append_libc-musl = "\
