@@ -1,7 +1,7 @@
 From d882577b29069cabfbc969cf33d5c1bdf4fa4769 Mon Sep 17 00:00:00 2001
 From: Takuro Ashie <ashie@clear-code.com>
 Date: Mon, 21 Jun 2021 15:07:37 +0900
-Subject: [PATCH 5/6] [ozone/wayland] Enable to use weston-keyboard without
+Subject: [PATCH 5/7] [ozone/wayland] Enable to use weston-keyboard without
  real keyboard
 
 Signed-off-by: Takuro Ashie <ashie@clear-code.com>
@@ -10,7 +10,7 @@ Signed-off-by: Takuro Ashie <ashie@clear-code.com>
  1 file changed, 2 insertions(+)
 
 diff --git a/ui/ozone/platform/wayland/host/wayland_input_method_context.cc b/ui/ozone/platform/wayland/host/wayland_input_method_context.cc
-index b7e3c6b3238f..e282b65e29ff 100644
+index b7e3c6b3238f7..e282b65e29ff5 100644
 --- a/ui/ozone/platform/wayland/host/wayland_input_method_context.cc
 +++ b/ui/ozone/platform/wayland/host/wayland_input_method_context.cc
 @@ -157,6 +157,8 @@ void WaylandInputMethodContext::Reset() {

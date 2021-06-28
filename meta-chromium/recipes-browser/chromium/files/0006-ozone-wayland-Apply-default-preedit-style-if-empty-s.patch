@@ -1,11 +1,11 @@
-From bedc3b19d3ba191d4e88812aa9c53eba5f0992ec Mon Sep 17 00:00:00 2001
+From 73e08af29b961f385b64ab76f8c23fd818f9e4f5 Mon Sep 17 00:00:00 2001
 From: Takuro Ashie <ashie@clear-code.com>
 Date: Wed, 23 Jun 2021 13:35:50 +0900
-Subject: [PATCH 6/6] [ozone/wayland] Apply default preedit style if empty
+Subject: [PATCH 6/7] [ozone/wayland] Apply default preedit style if empty
  style is passed
 
 Without this fix, no style is applied on Omnibox while default style is
-applied on contents area. This difference will confuse users.
+applied on contents area. This difference will confuses users.
 
 Signed-off-by: Takuro Ashie <ashie@clear-code.com>
 ---
@@ -13,7 +13,7 @@ Signed-off-by: Takuro Ashie <ashie@clear-code.com>
  1 file changed, 13 insertions(+)
 
 diff --git a/ui/ozone/platform/wayland/host/wayland_input_method_context.cc b/ui/ozone/platform/wayland/host/wayland_input_method_context.cc
-index e282b65e29ff..f4a27a793fbb 100644
+index e282b65e29ff5..f4a27a793fbb1 100644
 --- a/ui/ozone/platform/wayland/host/wayland_input_method_context.cc
 +++ b/ui/ozone/platform/wayland/host/wayland_input_method_context.cc
 @@ -189,8 +189,20 @@ void WaylandInputMethodContext::OnPreeditString(

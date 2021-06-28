@@ -1,7 +1,7 @@
 From ad5da0a360b625456e593b491f6101ffff3a80ad Mon Sep 17 00:00:00 2001
 From: Takuro Ashie <ashie@clear-code.com>
 Date: Thu, 10 Jun 2021 15:28:05 +0900
-Subject: [PATCH 3/6] Fix build error of ui/base/clipboard on use_ozone
+Subject: [PATCH 3/7] Fix build error of ui/base/clipboard on use_ozone
 
 Signed-off-by: Takuro Ashie <ashie@clear-code.com>
 ---
@@ -9,7 +9,7 @@ Signed-off-by: Takuro Ashie <ashie@clear-code.com>
  1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/ui/base/clipboard/BUILD.gn b/ui/base/clipboard/BUILD.gn
-index 6e806368add5..1bf728f47a7a 100644
+index 6e806368add5b..1bf728f47a7ac 100644
 --- a/ui/base/clipboard/BUILD.gn
 +++ b/ui/base/clipboard/BUILD.gn
 @@ -135,6 +135,8 @@ component("clipboard") {

@@ -1,7 +1,7 @@
 From 9822dc0815978eec35adeb883aa604f0e60be2f6 Mon Sep 17 00:00:00 2001
 From: Takuro Ashie <ashie@clear-code.com>
 Date: Fri, 18 Jun 2021 14:34:14 +0900
-Subject: [PATCH 4/6] [ozone/wayland] Add nullptr check on activate/deactivate
+Subject: [PATCH 4/7] [ozone/wayland] Add nullptr check on activate/deactivate
  of text_input
 
 Signed-off-by: Takuro Ashie <ashie@clear-code.com>
@@ -10,7 +10,7 @@ Signed-off-by: Takuro Ashie <ashie@clear-code.com>
  1 file changed, 5 insertions(+), 3 deletions(-)
 
 diff --git a/ui/ozone/platform/wayland/host/zwp_text_input_wrapper_v1.cc b/ui/ozone/platform/wayland/host/zwp_text_input_wrapper_v1.cc
-index 456b19474f1f..24d6d5200717 100644
+index 456b19474f1fe..24d6d52007173 100644
 --- a/ui/ozone/platform/wayland/host/zwp_text_input_wrapper_v1.cc
 +++ b/ui/ozone/platform/wayland/host/zwp_text_input_wrapper_v1.cc
 @@ -58,12 +58,14 @@ void ZWPTextInputWrapperV1::Reset() {

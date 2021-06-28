@@ -25,6 +25,7 @@ SRC_URI += " \
     file://0004-ozone-wayland-Add-nullptr-check-on-activate-deactiva.patch \
     file://0005-ozone-wayland-Enable-to-use-weston-keyboard-without-.patch \
     file://0006-ozone-wayland-Apply-default-preedit-style-if-empty-s.patch \
+    file://0007-ozone-wayland-Fix-cannot-activate-Omnibox-without-re.patch \
 "
 
 SRC_URI_append_libc-musl = "\
