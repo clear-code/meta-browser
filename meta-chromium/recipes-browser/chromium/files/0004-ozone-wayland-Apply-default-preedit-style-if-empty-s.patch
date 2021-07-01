@@ -1,0 +1,50 @@
+From 493a6823514147d0edebe39eac42cd2467098779 Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Wed, 23 Jun 2021 13:35:50 +0900
+Subject: [PATCH 4/8] [ozone/wayland] Apply default preedit style if empty
+ style is passed
+
+Without this fix, no style is applied on Omnibox while default style is
+applied on contents area. This difference will confuses users.
+
+Signed-off-by: Takuro Ashie <ashie@clear-code.com>
+---
+ .../wayland/host/wayland_input_method_context.cc    | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/ui/ozone/platform/wayland/host/wayland_input_method_context.cc b/ui/ozone/platform/wayland/host/wayland_input_method_context.cc
+index 43e26c24a747f..b1f3bd1619714 100644
+--- a/ui/ozone/platform/wayland/host/wayland_input_method_context.cc
++++ b/ui/ozone/platform/wayland/host/wayland_input_method_context.cc
+@@ -210,8 +210,20 @@ void WaylandInputMethodContext::OnPreeditString(
+     base::StringPiece text,
+     const std::vector<SpanStyle>& spans,
+     int32_t preedit_cursor) {
++  VLOG(1) << "WaylandInputMethodContext::OnPreeditString: " << text;
++  VLOG(1) << "WaylandInputMethodContext::OnPreeditString: cursor: " << preedit_cursor;
++
+   ui::CompositionText composition_text;
+   composition_text.text = base::UTF8ToUTF16(text);
++
++  if (spans.empty()) {
++    VLOG(1) << "WaylandInputMethodContext::OnPreeditString: Style is empty, apply default one";
++    ImeTextSpan text_span;
++    text_span.thickness = ImeTextSpan::Thickness::kThick;
++    text_span.start_offset = 0;
++    text_span.end_offset = composition_text.text.length();
++    composition_text.ime_text_spans.push_back(std::move(text_span));
++  }
+   for (const auto& span : spans) {
+     ImeTextSpan text_span;
+     auto start_offset = OffsetFromUTF8Offset(text, span.index);
+@@ -267,6 +279,7 @@ void WaylandInputMethodContext::OnPreeditString(
+ }
+ 
+ void WaylandInputMethodContext::OnCommitString(base::StringPiece text) {
++  VLOG(1) << "WaylandInputMethodContext::OnCommitString: " << text;
+   ime_delegate_->OnCommit(base::UTF8ToUTF16(text));
+ }
+ 
+-- 
+2.30.2
+
