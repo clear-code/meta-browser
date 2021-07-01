@@ -27,6 +27,7 @@ SRC_URI += " \
     file://0006-ozone-wayland-Apply-default-preedit-style-if-empty-s.patch \
     file://0007-ozone-wayland-Fix-cannot-activate-Omnibox-without-re.patch \
     file://0008-xkblayoutengine-set-pc101-as-default-keymap.patch \
+    file://0009-ozone-wayland-Force-set-keyboard-focus-when-input-co.patch \
 "
 
 SRC_URI_append_libc-musl = "\

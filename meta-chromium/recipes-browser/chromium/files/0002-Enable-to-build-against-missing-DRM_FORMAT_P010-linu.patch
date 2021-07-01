@@ -1,7 +1,7 @@
 From 5ccac67217025073c93526896eb8563eadf5cc25 Mon Sep 17 00:00:00 2001
 From: Takuro Ashie <ashie@clear-code.com>
 Date: Tue, 8 Jun 2021 13:47:47 +0900
-Subject: [PATCH 2/8] Enable to build against missing DRM_FORMAT_P010 linux
+Subject: [PATCH 2/9] Enable to build against missing DRM_FORMAT_P010 linux
  kernel
 
 Signed-off-by: Takuro Ashie <ashie@clear-code.com>
