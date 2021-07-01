@@ -25,6 +25,13 @@ SRC_URI += " \
     file://fix-ruy-numeric-limits-error.patch \
     file://0001-exception_handler.cc-Match-the-types-for-SIGSTKSZ.patch \
     file://chromium-freetype-2.11.patch \
+    file://0001-Enable-to-build-against-missing-DRM_FORMAT_P010-linu.patch \
+    file://0002-ozone-wayland-Add-nullptr-check-on-activate-deactiva.patch \
+    file://0003-ozone-wayland-Enable-to-use-weston-keyboard-without-.patch \
+    file://0004-ozone-wayland-Apply-default-preedit-style-if-empty-s.patch \
+    file://0005-ozone-wayland-Fix-cannot-activate-Omnibox-without-re.patch \
+    file://0006-xkblayoutengine-set-pc101-as-default-keymap.patch \
+    file://0007-ozone-wayland-Force-set-keyboard-focus-when-input-co.patch \
 "
 
 SRC_URI:append:libc-musl = "\
