@@ -1,7 +1,7 @@
 From d06414dc6b01a78ec59a2e4d6f4c3db82495f508 Mon Sep 17 00:00:00 2001
 From: Takuro Ashie <ashie@clear-code.com>
 Date: Mon, 28 Jun 2021 14:20:52 +0900
-Subject: [PATCH 5/7] [ozone/wayland] Fix cannot activate Omnibox without real
+Subject: [PATCH 5/8] [ozone/wayland] Fix cannot activate Omnibox without real
  keyboard
 
 Signed-off-by: Takuro Ashie <ashie@clear-code.com>

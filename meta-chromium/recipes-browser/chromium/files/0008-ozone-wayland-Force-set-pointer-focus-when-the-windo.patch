@@ -1,0 +1,31 @@
+From 051884dc2da8c4e3e9746a060147ab170f4c1719 Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Mon, 16 Aug 2021 11:39:43 +0900
+Subject: [PATCH 8/8] [ozone/wayland] Force set pointer focus when the window
+ gets touch focus
+
+It intends to enable wayland input methods such as weston-keyboard
+without real keyboard & mouse. Without this patch, IMs cannot be
+activated on content area when only touch panel is connected.
+
+Signed-off-by: Takuro Ashie <ashie@clear-code.com>
+---
+ ui/ozone/platform/wayland/host/wayland_event_source.cc | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/ui/ozone/platform/wayland/host/wayland_event_source.cc b/ui/ozone/platform/wayland/host/wayland_event_source.cc
+index 46327d9631e77..6619144fffe37 100644
+--- a/ui/ozone/platform/wayland/host/wayland_event_source.cc
++++ b/ui/ozone/platform/wayland/host/wayland_event_source.cc
+@@ -376,6 +376,8 @@ void WaylandEventSource::HandleTouchFocusChange(WaylandWindow* window,
+   DCHECK(window);
+   bool actual_focus = id ? !ShouldUnsetTouchFocus(window, id.value()) : focused;
+   window->set_touch_focus(actual_focus);
++  if (actual_focus)
++    HandlePointerFocusChange(window);
+ }
+ 
+ // Focus must not be unset if there is another touch point within |window|.
+-- 
+2.30.2
+
