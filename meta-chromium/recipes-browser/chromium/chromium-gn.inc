@@ -32,6 +32,7 @@ SRC_URI += " \
     file://0005-ozone-wayland-Fix-cannot-activate-Omnibox-without-re.patch \
     file://0006-xkblayoutengine-set-pc101-as-default-keymap.patch \
     file://0007-ozone-wayland-Force-set-keyboard-focus-when-input-co.patch \
+    file://0008-ozone-wayland-Force-set-pointer-focus-when-the-windo.patch \
 "
 
 SRC_URI:append:libc-musl = "\
