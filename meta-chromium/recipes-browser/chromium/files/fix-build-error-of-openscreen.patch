@@ -1,0 +1,14 @@
+diff -Nur chromium-92.0.4515.107-bak/third_party/openscreen/src/util/simple_fraction.h chromium-92.0.4515.107/third_party/openscreen/src/util/simple_fraction.h
+--- chromium-92.0.4515.107-bak/third_party/openscreen/src/util/simple_fraction.h	2021-07-20 03:47:27.000000000 +0900
++++ chromium-92.0.4515.107/third_party/openscreen/src/util/simple_fraction.h	2021-08-25 14:06:46.921828245 +0900
+@@ -35,8 +35,8 @@
+ 
+   constexpr SimpleFraction(const SimpleFraction&) = default;
+   constexpr SimpleFraction(SimpleFraction&&) noexcept = default;
+-  constexpr SimpleFraction& operator=(const SimpleFraction&) = default;
+-  constexpr SimpleFraction& operator=(SimpleFraction&&) = default;
++  SimpleFraction& operator=(const SimpleFraction&) = default;
++  SimpleFraction& operator=(SimpleFraction&&) = default;
+   ~SimpleFraction() = default;
+ 
+   constexpr bool operator==(const SimpleFraction& other) const {
