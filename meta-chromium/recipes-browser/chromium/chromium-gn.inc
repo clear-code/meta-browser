@@ -28,6 +28,7 @@ SRC_URI += " \
     file://0006-xkblayoutengine-set-pc101-as-default-keymap.patch \
     file://0007-ozone-wayland-Force-set-keyboard-focus-when-input-co.patch \
     file://0008-ozone-wayland-Force-set-pointer-focus-when-the-windo.patch \
+    file://fix-build-error-of-snappy.patch \
 "
 
 SRC_URI_append_libc-musl = "\
