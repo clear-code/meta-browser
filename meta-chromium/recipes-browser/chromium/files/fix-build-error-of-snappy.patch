@@ -1,0 +1,12 @@
+diff -Nur chromium-92.0.4515.159-orig/third_party/snappy/src/snappy.cc chromium-92.0.4515.159/third_party/snappy/src/snappy.cc
+--- chromium-92.0.4515.159-orig/third_party/snappy/src/snappy.cc	2021-08-17 09:18:55.000000000 +0900
++++ chromium-92.0.4515.159/third_party/snappy/src/snappy.cc	2022-02-02 12:49:33.364614808 +0900
+@@ -1026,7 +1026,7 @@
+   size_t literal_len = *tag >> 2;
+   size_t tag_type = *tag;
+   bool is_literal;
+-#if defined(__GNUC__) && defined(__x86_64__)
++#if defined(__GNUC__) && defined(__x86_64__) && defined(__GCC_ASM_FLAG_OUTPUTS__)
+   // TODO clang misses the fact that the (c & 3) already correctly
+   // sets the zero flag.
+   asm("and $3, %k[tag_type]\n\t"
