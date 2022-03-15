@@ -35,6 +35,7 @@ SRC_URI += " \
     file://0008-ozone-wayland-Force-set-pointer-focus-when-the-windo.patch \
     file://fix-build-error-of-openscreen.patch \
     file://fix-build-error-of-snappy.patch \
+    file://0001-Remove-bashism-from-wrapper-script.patch \
 "
 
 SRC_URI_append_libc-musl = "\
@@ -98,9 +99,6 @@ DEPENDS += " \
     virtual/libgl \
 "
 DEPEND_append_runtime-llvm = " compiler-rt-native libcxx-native"
-
-# The wrapper script we use from upstream requires bash.
-RDEPENDS_${PN} = "bash"
 
 COMPATIBLE_MACHINE = "(-)"
 COMPATIBLE_MACHINE_aarch64 = "(.*)"
