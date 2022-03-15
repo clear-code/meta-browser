@@ -29,6 +29,7 @@ SRC_URI += " \
     file://0007-ozone-wayland-Force-set-keyboard-focus-when-input-co.patch \
     file://0008-ozone-wayland-Force-set-pointer-focus-when-the-windo.patch \
     file://fix-build-error-of-snappy.patch \
+    file://0001-Remove-bashism-from-wrapper-script.patch \
 "
 
 SRC_URI_append_libc-musl = "\
@@ -90,9 +91,6 @@ DEPENDS += " \
     qemu-native \
     virtual/libgl \
 "
-
-# The wrapper script we use from upstream requires bash.
-RDEPENDS_${PN} = "bash"
 
 COMPATIBLE_MACHINE = "(-)"
 COMPATIBLE_MACHINE_aarch64 = "(.*)"
