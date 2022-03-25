@@ -40,6 +40,7 @@ SRC_URI += " \
     file://0013-ozone-wayland-Don-t-call-eglSwapBuffers-when-window-.patch \
     file://fix-build-error-of-openscreen.patch \
     file://fix-build-error-of-snappy.patch \
+    file://0001-Disable-context-menu.patch \
 "
 
 SRC_URI_append_libc-musl = "\
