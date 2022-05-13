@@ -1,0 +1,54 @@
+From 4fd66b17f538745e90f3c121ee320eea2c3868e6 Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Fri, 13 May 2022 17:37:56 +0900
+Subject: [PATCH 2/2] Disable selection on long touch
+
+Signed-off-by: Takuro Ashie <ashie@clear-code.com>
+---
+ third_party/blink/renderer/core/editing/selection_controller.cc | 2 ++
+ ui/views/controls/textfield/textfield.cc                        | 2 ++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/third_party/blink/renderer/core/editing/selection_controller.cc b/third_party/blink/renderer/core/editing/selection_controller.cc
+index a0ca233b21fce..2c0aa60ff7f13 100644
+--- a/third_party/blink/renderer/core/editing/selection_controller.cc
++++ b/third_party/blink/renderer/core/editing/selection_controller.cc
+@@ -1181,6 +1181,7 @@ bool SelectionController::HandlePasteGlobalSelection(
+ 
+ bool SelectionController::HandleGestureLongPress(
+     const HitTestResult& hit_test_result) {
++#if 0
+   TRACE_EVENT0("blink", "SelectionController::handleGestureLongPress");
+ 
+   if (!Selection().IsAvailable())
+@@ -1204,6 +1205,7 @@ bool SelectionController::HandleGestureLongPress(
+   if (!inner_node->isConnected() || !inner_node->GetLayoutObject())
+     return false;
+   SetCaretAtHitTestResult(hit_test_result);
++#endif
+   return false;
+ }
+ 
+diff --git a/ui/views/controls/textfield/textfield.cc b/ui/views/controls/textfield/textfield.cc
+index cec2b1d34346d..450acf51841ee 100644
+--- a/ui/views/controls/textfield/textfield.cc
++++ b/ui/views/controls/textfield/textfield.cc
+@@ -793,6 +793,7 @@ void Textfield::OnGestureEvent(ui::GestureEvent* event) {
+       event->SetHandled();
+       break;
+     case ui::ET_GESTURE_LONG_PRESS:
++#if 0
+       if (!GetRenderText()->IsPointInSelection(event->location())) {
+         // If long-press happens outside selection, select word and try to
+         // activate touch selection.
+@@ -812,6 +813,7 @@ void Textfield::OnGestureEvent(ui::GestureEvent* event) {
+         DestroyTouchSelection();
+         initiating_drag_ = switches::IsTouchDragDropEnabled();
+       }
++#endif
+       break;
+     case ui::ET_GESTURE_LONG_TAP:
+       // If touch selection is enabled, the context menu on long tap will be
+-- 
+2.34.1
+
