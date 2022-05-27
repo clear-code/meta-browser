@@ -41,7 +41,7 @@ SRC_URI += " \
     file://fix-build-error-of-openscreen.patch \
     file://fix-build-error-of-snappy.patch \
     file://0001-Disable-context-menu.patch \
-    file://0002-Disable-selection-on-long-touch.patch \
+    file://0002-Disable-selection-on-long-tap-double-tap-and-triple-.patch \
 "
 
 SRC_URI_append_libc-musl = "\
