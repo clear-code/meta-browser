@@ -4,7 +4,7 @@ require gn-utils.inc
 
 GTKIC_VERSION = "${@bb.utils.contains('PACKAGECONFIG', 'gtk4', '4', '3',d)}"
 
-inherit features_check gtk-icon-cache qemu
+inherit gtk-icon-cache qemu
 
 # The actual directory name in out/ is irrelevant for GN.
 OUTPUT_DIR = "out/Release"
@@ -25,7 +25,7 @@ SRC_URI += " \
     file://0016-cast-to-bool-to-avoid-constexpr-error.patch \
 "
 
-SRC_URI:append:libc-musl = "\
+SRC_URI_append_libc-musl = "\
     file://musl/0001-mallinfo-implementation-is-glibc-specific.patch \
     file://musl/0002-execinfo-implementation-is-glibc-specific.patch \
     file://musl/0003-Define-TEMP_FAILURE_RETRY-and-__si_fields.patch \
@@ -84,26 +84,26 @@ DEPENDS += " \
     qemu-native \
     virtual/libgl \
 "
-DEPEND:append:runtime-llvm = " compiler-rt-native libcxx-native"
+DEPEND_append_runtime-llvm = " compiler-rt-native libcxx-native"
 
 # The wrapper script we use from upstream requires bash.
-RDEPENDS:${PN} = "bash"
+RDEPENDS_${PN} = "bash"
 
 COMPATIBLE_MACHINE = "(-)"
-COMPATIBLE_MACHINE:aarch64 = "(.*)"
-COMPATIBLE_MACHINE:armv6 = "(.*)"
-COMPATIBLE_MACHINE:armv7a = "(.*)"
-COMPATIBLE_MACHINE:armv7ve = "(.*)"
-COMPATIBLE_MACHINE:x86 = "(.*)"
-COMPATIBLE_MACHINE:x86-64 = "(.*)"
+COMPATIBLE_MACHINE_aarch64 = "(.*)"
+COMPATIBLE_MACHINE_armv6 = "(.*)"
+COMPATIBLE_MACHINE_armv7a = "(.*)"
+COMPATIBLE_MACHINE_armv7ve = "(.*)"
+COMPATIBLE_MACHINE_x86 = "(.*)"
+COMPATIBLE_MACHINE_x86-64 = "(.*)"
 
 # Also build the parts that are run on the host with clang.
-BUILD_AR:toolchain-clang = "llvm-ar"
-BUILD_CC:toolchain-clang = "clang"
-BUILD_CXX:toolchain-clang = "clang++"
-BUILD_LD:toolchain-clang = "clang"
+BUILD_AR_toolchain-clang = "llvm-ar"
+BUILD_CC_toolchain-clang = "clang"
+BUILD_CXX_toolchain-clang = "clang++"
+BUILD_LD_toolchain-clang = "clang"
 
-PACKAGECONFIG ??= "upower use-egl"
+PACKAGECONFIG ??= "use-egl"
 
 # this makes sure the dependencies for the EGL mode are present; otherwise, the configure scripts
 # automatically and silently fall back to GLX
@@ -192,25 +192,25 @@ GN_ARGS += "use_lld=true use_gold=false"
 #    instead, so that if DEBUG_BUILD is not set GN will not create a huge debug
 #    binary anyway. Since our compiler flags are passed after GN's, -g0 does
 #    not cause any issues if DEBUG_BUILD is set, as -g1 will be passed later.
-DEBUG_FLAGS:remove:arm = "-g"
-DEBUG_FLAGS:append:arm = "-g1"
-DEBUG_FLAGS:remove:x86 = "-g"
-DEBUG_FLAGS:append:x86 = "-g1"
+DEBUG_FLAGS_remove_arm = "-g"
+DEBUG_FLAGS_append_arm = "-g1"
+DEBUG_FLAGS_remove_x86 = "-g"
+DEBUG_FLAGS_append_x86 = "-g1"
 GN_ARGS += "symbol_level=0"
 
 # As of Chromium 62.0.3202.94 and Yocto Rocko (GCC 7, binutils 2.29), passing
 # -g to the compiler results in many linker errors on aarch64, such as:
 # obj/third_party/WebKit/Source/modules/payments/libpayments.a(PaymentEventDataConversion.o)(.debug_loc+0x4e25): error: relocation overflow in R_AARCH64_ABS32
-DEBUG_FLAGS:remove:aarch64 = "-g"
-DEBUG_FLAGS:append:aarch64 = "-g1"
+DEBUG_FLAGS_remove_aarch64 = "-g"
+DEBUG_FLAGS_append_aarch64 = "-g1"
 
 # As of Chromium 60.0.3112.101 and Yocto Pyro (GCC 6, binutils 2.28), passing
 # -g to the compiler results in many linker errors on x86_64, such as:
 # obj/third_party/WebKit/Source/core/loader/libloader.a(ModuleTreeLinker.o)(.debug_loc+0x1e9a5): error: relocation overflow: reference to local symbol 82 in obj/third_party/WebKit/Source/core/loader/libloader.a(ModuleTreeLinker.o)
 # obj/third_party/WebKit/Source/core/libcore_generated.a(ScriptModule.o)(.debug_loc+0x253c): error: relocation overflow: reference to local symbol 31 in obj/third_party/WebKit/Source/core/libcore_generated.a(ScriptModule.o)
 # so we have to use the same hack described above.
-DEBUG_FLAGS:remove:x86-64 = "-g"
-DEBUG_FLAGS:append:x86-64 = "-g1"
+DEBUG_FLAGS_remove_x86-64 = "-g"
+DEBUG_FLAGS_append_x86-64 = "-g1"
 
 # Disable Chrome Remote Desktop (aka Chromoting) support. Building host support
 # (so that the machine running this recipe can be controlled remotely from
@@ -266,9 +266,9 @@ GN_ARGS += ' \
 '
 
 # Use libcxx headers for native parts
-BUILD_CPPFLAGS:append:runtime-llvm = " -isysroot=${STAGING_DIR_NATIVE} -stdlib=libc++"
+BUILD_CPPFLAGS_append_runtime-llvm = " -isysroot=${STAGING_DIR_NATIVE} -stdlib=libc++"
 # Use libgcc for native parts
-BUILD_LDFLAGS:append:runtime-llvm = " -rtlib=libgcc -unwindlib=libgcc -stdlib=libc++ -lc++abi -rpath ${STAGING_LIBDIR_NATIVE}"
+BUILD_LDFLAGS_append_runtime-llvm = " -rtlib=libgcc -unwindlib=libgcc -stdlib=libc++ -lc++abi -rpath ${STAGING_LIBDIR_NATIVE}"
 
 # Toolchains we will use for the build. We need to point to the toolchain file
 # we've created, set the right target architecture and make sure we are not
@@ -305,17 +305,17 @@ def get_compiler_flag(params, param_name, d):
 ARM_FLOAT_ABI = "${@bb.utils.contains('TUNE_FEATURES', 'callconvention-hard', 'hard', 'softfp', d)}"
 ARM_FPU = "${@get_compiler_flag(d.getVar('TUNE_CCARGS').split(), '-mfpu', d)}"
 ARM_TUNE = "${@get_compiler_flag(d.getVar('TUNE_CCARGS').split(), '-mcpu', d)}"
-ARM_VERSION:aarch64 = "8"
-ARM_VERSION:armv7a = "7"
-ARM_VERSION:armv7ve = "7"
-ARM_VERSION:armv6 = "6"
+ARM_VERSION_aarch64 = "8"
+ARM_VERSION_armv7a = "7"
+ARM_VERSION_armv7ve = "7"
+ARM_VERSION_armv6 = "6"
 
 # GN computes and defaults to it automatically where needed
 # forcing it from cmdline breaks build on places where it ends up
 # overriding what GN wants
-TUNE_CCARGS:remove = "-mthumb"
+TUNE_CCARGS_remove = "-mthumb"
 
-GN_ARGS:append:arm = ' \
+GN_ARGS_append_arm = ' \
         arm_float_abi="${ARM_FLOAT_ABI}" \
         arm_fpu="${ARM_FPU}" \
         arm_tune="${ARM_TUNE}" \
@@ -323,15 +323,15 @@ GN_ARGS:append:arm = ' \
 '
 # tcmalloc's atomicops-internals-arm-v6plus.h uses the "dmb" instruction that
 # is not available on (some?) ARMv6 models, which causes the build to fail.
-GN_ARGS:append:armv6 = ' use_partition_alloc_as_malloc=false enable_backup_ref_ptr_support=false'
+GN_ARGS_append_armv6 = ' use_partition_alloc_as_malloc=false enable_backup_ref_ptr_support=false'
 # The WebRTC code fails to build on ARMv6 when NEON is enabled.
 # https://bugs.chromium.org/p/webrtc/issues/detail?id=6574
-GN_ARGS:append:armv6 = ' arm_use_neon=false'
+GN_ARGS_append_armv6 = ' arm_use_neon=false'
 
 # Disable glibc shims on musl
 # tcmalloc does not play well with musl as of M62 (and possibly earlier).
 # https://github.com/gperftools/gperftools/issues/693
-GN_ARGS:append:libc-musl = ' use_allocator_shim=false use_partition_alloc_as_malloc=false enable_backup_ref_ptr_support=false'
+GN_ARGS_append_libc-musl = ' use_allocator_shim=false use_partition_alloc_as_malloc=false enable_backup_ref_ptr_support=false'
 
 CHROMIUM_EXTRA_ARGS ?= " \
         ${@bb.utils.contains('PACKAGECONFIG', 'use-egl', '--use-gl=egl', '', d)} \
@@ -510,9 +510,9 @@ do_install() {
 
 PACKAGES =+ "${PN}-chromedriver"
 
-FILES:${PN}-chromedriver = "${bindir}/chromedriver"
+FILES_${PN}-chromedriver = "${bindir}/chromedriver"
 
-FILES:${PN} = " \
+FILES_${PN} = " \
         ${bindir}/chromium \
         ${datadir}/applications/chromium.desktop \
         ${datadir}/icons/hicolor/*x*/apps/chromium.png \
@@ -522,8 +522,8 @@ FILES:${PN} = " \
 PACKAGE_DEBUG_SPLIT_STYLE = "debug-without-src"
 
 # There is no need to ship empty -dev packages.
-ALLOW_EMPTY:${PN}-dev = "0"
+ALLOW_EMPTY_${PN}-dev = "0"
 
 # ERROR: QA Issue: lib32-chromium-ozone-wayland: ELF binary /usr/bin/chromium has relocations in .text [textrel]
-INSANE_SKIP:${PN}:append:x86 = "textrel"
+INSANE_SKIP_${PN}_append_x86 = "textrel"
 

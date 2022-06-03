@@ -25,4 +25,4 @@ GN_ARGS += "\
 "
 
 # The chromium binary must always be started with those arguments.
-CHROMIUM_EXTRA_ARGS:append = " --ozone-platform=wayland"
+CHROMIUM_EXTRA_ARGS_append = " --ozone-platform=wayland"
