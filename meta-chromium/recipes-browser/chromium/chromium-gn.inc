@@ -22,6 +22,8 @@ SRC_URI += " \
     file://0011-Revert-Use-ffile-compilation-dir-instead-of-fdebug-c.patch \
     file://0012-ozone-wayland-don-t-build-xcb-for-pure-wayland-build.patch \
     file://0014-Fix-no-member-named-tie-in-namespace-std.patch \
+    file://0001-Enable-to-build-against-missing-DRM_FORMAT_P010-linu.patch \
+    file://0001-Use-F_SEAL_FUTURE_WRITE-only-when-it-s-available.patch \
 "
 
 SRC_URI_append_libc-musl = "\

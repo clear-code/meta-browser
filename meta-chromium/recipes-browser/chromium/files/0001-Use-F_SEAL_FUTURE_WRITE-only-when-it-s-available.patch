@@ -1,0 +1,31 @@
+From e7c3641549db2d2dd1d78eab2b741d09888d4fee Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Thu, 16 Jun 2022 15:16:07 +0900
+Subject: [PATCH] Use F_SEAL_FUTURE_WRITE only when it's available
+
+Signed-off-by: Takuro Ashie <ashie@clear-code.com>
+---
+ .../seccomp-bpf-helpers/syscall_parameters_restrictions.cc   | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc b/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
+index 9728d0b52e68c..4f06fa6d58f13 100644
+--- a/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
++++ b/sandbox/linux/seccomp-bpf-helpers/syscall_parameters_restrictions.cc
+@@ -261,8 +261,13 @@ ResultExpr RestrictFcntlCommands() {
+ 
+   const uint64_t kAllowedMask = O_ACCMODE | O_APPEND | O_NONBLOCK | O_SYNC |
+                                 kOLargeFileFlag | O_CLOEXEC | O_NOATIME;
++#if defined(F_SEAL_FUTURE_WRITE)
+   const uint64_t kAllowedSeals =
+       F_SEAL_SEAL | F_SEAL_GROW | F_SEAL_SHRINK | F_SEAL_FUTURE_WRITE;
++#else
++  const uint64_t kAllowedSeals =
++      F_SEAL_SEAL | F_SEAL_GROW | F_SEAL_SHRINK;
++#endif
+   // clang-format off
+   return Switch(cmd)
+       .CASES((F_GETFL,
+-- 
+2.34.1
+
