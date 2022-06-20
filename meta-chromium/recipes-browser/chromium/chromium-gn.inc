@@ -22,6 +22,7 @@ SRC_URI += " \
     file://0013-Revert-Use-ffile-compilation-dir-instead-of-fdebug-c.patch \
     file://0014-ozone-wayland-don-t-build-xcb-for-pure-wayland-build.patch \
     file://0015-IWYU-add-memory-for-std-unique_ptr-in-base-CommandLi.patch \
+    file://0001-Enable-to-build-against-missing-DRM_FORMAT_P010-linu.patch \
 "
 
 SRC_URI_append_libc-musl = "\
