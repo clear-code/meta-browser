@@ -23,7 +23,13 @@ SRC_URI += " \
     file://0012-ozone-wayland-don-t-build-xcb-for-pure-wayland-build.patch \
     file://0014-Fix-no-member-named-tie-in-namespace-std.patch \
     file://0001-Enable-to-build-against-missing-DRM_FORMAT_P010-linu.patch \
-    file://0001-Use-F_SEAL_FUTURE_WRITE-only-when-it-s-available.patch \
+    file://0002-Use-F_SEAL_FUTURE_WRITE-only-when-it-s-available.patch \
+    file://0003-ozone-wayland-Apply-default-preedit-style-if-empty-s.patch \
+    file://0004-ozone-wayland-Fix-cannot-activate-Omnibox-without-re.patch \
+    file://0005-xkblayoutengine-set-pc101-as-default-keymap.patch \
+    file://0006-Remove-bashism-from-wrapper-script.patch \
+    file://0007-Disable-context-menu.patch \
+    file://0008-Disable-selection-on-long-tap-double-tap-and-triple-.patch \
 "
 
 SRC_URI_append_libc-musl = "\
