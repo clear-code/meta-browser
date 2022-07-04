@@ -1,7 +1,7 @@
-From efdf5f8cc6af88b3c25073b0d7047b7a238cb24b Mon Sep 17 00:00:00 2001
+From 619bc039be408eb83d29875371f42eb742e65ec8 Mon Sep 17 00:00:00 2001
 From: Takuro Ashie <ashie@clear-code.com>
 Date: Mon, 16 Aug 2021 11:39:43 +0900
-Subject: [PATCH 8/8] [ozone/wayland] Force set pointer focus when the window
+Subject: [PATCH 08/10] [ozone/wayland] Force set pointer focus when the window
  gets touch focus
 
 It intends to enable wayland input methods such as weston-keyboard
@@ -27,5 +27,5 @@ index 6e23105258a31..1ed349e5bd1b4 100644
  
  // Focus must not be unset if there is another touch point within |window|.
 -- 
-2.30.2
+2.34.1
 

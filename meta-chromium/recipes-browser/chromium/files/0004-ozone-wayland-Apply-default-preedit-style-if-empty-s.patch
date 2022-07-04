@@ -1,7 +1,7 @@
-From 493a6823514147d0edebe39eac42cd2467098779 Mon Sep 17 00:00:00 2001
+From 1156ce8ffc8f833891fcae256a2ca5064142a506 Mon Sep 17 00:00:00 2001
 From: Takuro Ashie <ashie@clear-code.com>
 Date: Wed, 23 Jun 2021 13:35:50 +0900
-Subject: [PATCH 4/8] [ozone/wayland] Apply default preedit style if empty
+Subject: [PATCH 04/10] [ozone/wayland] Apply default preedit style if empty
  style is passed
 
 Without this fix, no style is applied on Omnibox while default style is
@@ -46,5 +46,5 @@ index 43e26c24a747f..b1f3bd1619714 100644
  }
  
 -- 
-2.30.2
+2.34.1
 

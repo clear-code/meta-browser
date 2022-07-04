@@ -1,7 +1,7 @@
-From 5b49540322b4857535db93f2453edc6e18c9a434 Mon Sep 17 00:00:00 2001
+From 399ee2c541a925ce9c4d6f80bd133bbd673f652c Mon Sep 17 00:00:00 2001
 From: Takuro Ashie <ashie@clear-code.com>
 Date: Thu, 1 Jul 2021 12:12:53 +0900
-Subject: [PATCH 6/8] xkblayoutengine: set pc101 as default keymap
+Subject: [PATCH 06/10] xkblayoutengine: set pc101 as default keymap
 
 On the initial state, the engine has empty keymap and it's filled when a
 keyboard device is found. But when a system doesn't have physical
@@ -42,5 +42,5 @@ index 2e2d67916f052..059bc036d2b7f 100644
  
  XkbKeyboardLayoutEngine::~XkbKeyboardLayoutEngine() {
 -- 
-2.30.2
+2.34.1
 

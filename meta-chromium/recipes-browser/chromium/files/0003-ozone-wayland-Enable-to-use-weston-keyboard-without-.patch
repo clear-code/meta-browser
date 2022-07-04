@@ -1,7 +1,7 @@
-From 5c0d0ce7d789da1b3e11573b7a25121f65a09357 Mon Sep 17 00:00:00 2001
+From 0e1c19671a244a4c1c1cdabb40e086682cdd87c0 Mon Sep 17 00:00:00 2001
 From: Takuro Ashie <ashie@clear-code.com>
 Date: Mon, 21 Jun 2021 15:07:37 +0900
-Subject: [PATCH 3/8] [ozone/wayland] Enable to use weston-keyboard without
+Subject: [PATCH 03/10] [ozone/wayland] Enable to use weston-keyboard without
  real keyboard
 
 Signed-off-by: Takuro Ashie <ashie@clear-code.com>
@@ -23,5 +23,5 @@ index cca68fde637e9..43e26c24a747f 100644
      return;
  
 -- 
-2.30.2
+2.34.1
 

@@ -1,8 +1,8 @@
-From 63439f073085b4412216169fad2a9c624a70c6ef Mon Sep 17 00:00:00 2001
+From b85d1c981bbc02a954d5849c0010d608dbba4134 Mon Sep 17 00:00:00 2001
 From: Takuro Ashie <ashie@clear-code.com>
 Date: Fri, 18 Jun 2021 14:34:14 +0900
-Subject: [PATCH 2/8] [ozone/wayland] Add nullptr check on activate/deactivate
- of text_input
+Subject: [PATCH 02/10] [ozone/wayland] Add nullptr check on
+ activate/deactivate of text_input
 
 Signed-off-by: Takuro Ashie <ashie@clear-code.com>
 ---
@@ -32,5 +32,5 @@ index ed95f49c4f684..c9791adcd454c 100644
  
  void ZWPTextInputWrapperV1::ShowInputPanel() {
 -- 
-2.30.2
+2.34.1
 
