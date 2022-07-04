@@ -1,7 +1,7 @@
-From f5a10195bb0a82e65b34c571d265931173362648 Mon Sep 17 00:00:00 2001
+From ab6e9502902013c12e5858c4195263ea6d584222 Mon Sep 17 00:00:00 2001
 From: Takuro Ashie <ashie@clear-code.com>
 Date: Tue, 15 Mar 2022 18:00:47 +0900
-Subject: [PATCH 6/8] Remove bashism from wrapper script
+Subject: [PATCH 6/9] Remove bashism from wrapper script
 
 Signed-off-by: Takuro Ashie <ashie@clear-code.com>
 ---

@@ -1,7 +1,7 @@
-From f29a128317682ffcaab800e6d39c1ff1aa43edd5 Mon Sep 17 00:00:00 2001
+From 05490b502b32d0871c0571da764a810a09792da0 Mon Sep 17 00:00:00 2001
 From: Takuro Ashie <ashie@clear-code.com>
 Date: Fri, 13 May 2022 17:37:56 +0900
-Subject: [PATCH 8/8] Disable selection on long tap, double tap and triple tap
+Subject: [PATCH 8/9] Disable selection on long tap, double tap and triple tap
 
 Signed-off-by: Takuro Ashie <ashie@clear-code.com>
 ---

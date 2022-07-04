@@ -1,7 +1,7 @@
-From 064637f2156265596418c62f475e75f291c60570 Mon Sep 17 00:00:00 2001
+From a9ca9d9b96b0f8edcacdf5c916dc8c657dce6b41 Mon Sep 17 00:00:00 2001
 From: Takuro Ashie <ashie@clear-code.com>
 Date: Fri, 25 Mar 2022 11:35:48 +0900
-Subject: [PATCH 7/8] Disable context menu
+Subject: [PATCH 7/9] Disable context menu
 
 Signed-off-by: Takuro Ashie <ashie@clear-code.com>
 ---

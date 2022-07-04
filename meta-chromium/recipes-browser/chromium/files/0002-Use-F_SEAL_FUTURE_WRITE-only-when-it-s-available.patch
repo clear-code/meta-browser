@@ -1,7 +1,7 @@
-From 2a17ce089786f4fe49e30e9c45d877571ba851a4 Mon Sep 17 00:00:00 2001
+From eea01a950c090fa13c50b654fb32a9a9f730debe Mon Sep 17 00:00:00 2001
 From: Takuro Ashie <ashie@clear-code.com>
 Date: Thu, 16 Jun 2022 15:16:07 +0900
-Subject: [PATCH 2/8] Use F_SEAL_FUTURE_WRITE only when it's available
+Subject: [PATCH 2/9] Use F_SEAL_FUTURE_WRITE only when it's available
 
 Signed-off-by: Takuro Ashie <ashie@clear-code.com>
 ---
