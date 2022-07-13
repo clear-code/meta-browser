@@ -33,6 +33,8 @@ SRC_URI += " \
     file://0009-Remove-bashism-from-wrapper-script.patch \
     file://0010-ozone-wayland-Avoid-crash-on-opening-the-file-select.patch \
     file://0011-ozone-wayland-Enable-to-set-content-type-to-input-me.patch \
+    file://0001-Disable-context-menu.patch \
+    file://0002-Disable-selection-on-long-tap-double-tap-and-triple-.patch \
 "
 
 SRC_URI_append_libc-musl = "\

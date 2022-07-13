@@ -1,0 +1,70 @@
+From 71ab8b7a8be578583e8569f49c6c0bb4eee12bf8 Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Fri, 25 Mar 2022 11:35:48 +0900
+Subject: [PATCH 1/2] Disable context menu
+
+Signed-off-by: Takuro Ashie <ashie@clear-code.com>
+---
+ content/browser/renderer_host/render_frame_host_impl.cc | 2 ++
+ ui/views/context_menu_controller.cc                     | 2 ++
+ ui/views/touchui/touch_selection_menu_views.cc          | 2 ++
+ 3 files changed, 6 insertions(+)
+
+diff --git a/content/browser/renderer_host/render_frame_host_impl.cc b/content/browser/renderer_host/render_frame_host_impl.cc
+index 193bfd1abc5f9..5f19ab6f1f686 100644
+--- a/content/browser/renderer_host/render_frame_host_impl.cc
++++ b/content/browser/renderer_host/render_frame_host_impl.cc
+@@ -6211,8 +6211,10 @@ void RenderFrameHostImpl::ShowContextMenu(
+         GetProcess(), bad_message::RFH_NEGATIVE_SELECTION_START_OFFSET);
+   }
+ 
++#if 0
+   delegate_->ShowContextMenu(this, std::move(context_menu_client),
+                              validated_params);
++#endif
+ }
+ 
+ void RenderFrameHostImpl::DidLoadResourceFromMemoryCache(
+diff --git a/ui/views/context_menu_controller.cc b/ui/views/context_menu_controller.cc
+index 6feb5550fdcf9..89c3c16197951 100644
+--- a/ui/views/context_menu_controller.cc
++++ b/ui/views/context_menu_controller.cc
+@@ -19,6 +19,7 @@ void ContextMenuController::ShowContextMenuForView(
+   // Use a boolean flag to early-exit out of re-entrant behavior.
+   if (is_opening_)
+     return;
++#if 0
+   is_opening_ = true;
+ 
+   // We might get deleted while showing the context menu (including as a result
+@@ -32,6 +33,7 @@ void ContextMenuController::ShowContextMenuForView(
+     return;
+ 
+   is_opening_ = false;
++#endif
+ }
+ 
+ }  // namespace views
+diff --git a/ui/views/touchui/touch_selection_menu_views.cc b/ui/views/touchui/touch_selection_menu_views.cc
+index bc9e017bab45d..07195089ad882 100644
+--- a/ui/views/touchui/touch_selection_menu_views.cc
++++ b/ui/views/touchui/touch_selection_menu_views.cc
+@@ -69,6 +69,7 @@ TouchSelectionMenuViews::TouchSelectionMenuViews(
+ 
+ void TouchSelectionMenuViews::ShowMenu(const gfx::Rect& anchor_rect,
+                                        const gfx::Size& handle_image_size) {
++#if 0
+   CreateButtons();
+ 
+   // After buttons are created, check if there is enough room between handles to
+@@ -101,6 +102,7 @@ void TouchSelectionMenuViews::ShowMenu(const gfx::Rect& anchor_rect,
+   // doesn't make sense for a menu, so put it back on top.
+   widget->StackAtTop();
+   widget->Show();
++#endif
+ }
+ 
+ bool TouchSelectionMenuViews::IsMenuAvailable(
+-- 
+2.34.1
+
