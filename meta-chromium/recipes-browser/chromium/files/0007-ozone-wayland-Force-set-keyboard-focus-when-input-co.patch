@@ -1,0 +1,83 @@
+From b90018b9310fb6fb4836d7473a4b718699847e3f Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Thu, 1 Jul 2021 15:03:28 +0900
+Subject: [PATCH 07/10] [ozone/wayland] Force set keyboard focus when input
+ context gets focus
+
+Signed-off-by: Takuro Ashie <ashie@clear-code.com>
+---
+ .../platform/wayland/host/wayland_input_method_context.cc | 3 +++
+ ui/ozone/platform/wayland/host/wayland_toplevel_window.cc | 8 ++++++++
+ ui/ozone/platform/wayland/host/wayland_toplevel_window.h  | 2 ++
+ ui/ozone/platform/wayland/host/wayland_window.h           | 2 ++
+ 4 files changed, 15 insertions(+)
+
+diff --git a/ui/ozone/platform/wayland/host/wayland_input_method_context.cc b/ui/ozone/platform/wayland/host/wayland_input_method_context.cc
+index 3beb6a3fa7d17..2bbbdfbe62b91 100644
+--- a/ui/ozone/platform/wayland/host/wayland_input_method_context.cc
++++ b/ui/ozone/platform/wayland/host/wayland_input_method_context.cc
+@@ -24,6 +24,7 @@
+ #include "ui/events/keycodes/dom/dom_code.h"
+ #include "ui/events/types/event_type.h"
+ #include "ui/gfx/range/range.h"
++#include "ui/ozone/platform/wayland/host/wayland_window.h"
+ #include "ui/ozone/platform/wayland/host/wayland_connection.h"
+ #include "ui/ozone/platform/wayland/host/zwp_text_input_wrapper_v1.h"
+ #include "ui/ozone/public/ozone_switches.h"
+@@ -526,6 +527,8 @@ void WaylandInputMethodContext::MaybeUpdateActivated() {
+ 
+   activated_ = activated;
+   if (activated) {
++    window->ForceActivate();
++    window->set_keyboard_focus(true);
+     text_input_->Activate(window);
+     text_input_->ShowInputPanel();
+   } else {
+diff --git a/ui/ozone/platform/wayland/host/wayland_toplevel_window.cc b/ui/ozone/platform/wayland/host/wayland_toplevel_window.cc
+index 492c42cc08aff..cd882005821e1 100644
+--- a/ui/ozone/platform/wayland/host/wayland_toplevel_window.cc
++++ b/ui/ozone/platform/wayland/host/wayland_toplevel_window.cc
+@@ -85,6 +85,14 @@ void WaylandToplevelWindow::ApplyPendingBounds() {
+   SetBoundsDip(pending_configures_.back().bounds_dip);
+ }
+ 
++void WaylandToplevelWindow::ForceActivate()
++{
++  if (!is_active_) {
++    is_active_ = true;
++    delegate()->OnActivationChanged(is_active_);
++  }
++}
++
+ void WaylandToplevelWindow::DispatchHostWindowDragMovement(
+     int hittest,
+     const gfx::Point& pointer_location_in_px) {
+diff --git a/ui/ozone/platform/wayland/host/wayland_toplevel_window.h b/ui/ozone/platform/wayland/host/wayland_toplevel_window.h
+index f22423439788a..9b57d75cd4ef2 100644
+--- a/ui/ozone/platform/wayland/host/wayland_toplevel_window.h
++++ b/ui/ozone/platform/wayland/host/wayland_toplevel_window.h
+@@ -43,6 +43,8 @@ class WaylandToplevelWindow : public WaylandWindow,
+   // be called after processing all pending events in the wayland connection.
+   void ApplyPendingBounds();
+ 
++  void ForceActivate() override;
++
+   // WmMoveResizeHandler
+   void DispatchHostWindowDragMovement(
+       int hittest,
+diff --git a/ui/ozone/platform/wayland/host/wayland_window.h b/ui/ozone/platform/wayland/host/wayland_window.h
+index 2837740f6a75b..7da3bae288c8a 100644
+--- a/ui/ozone/platform/wayland/host/wayland_window.h
++++ b/ui/ozone/platform/wayland/host/wayland_window.h
+@@ -256,6 +256,8 @@ class WaylandWindow : public PlatformWindow,
+   // WaylandPopup, if |this| has type of WaylandPopup.
+   virtual WaylandPopup* AsWaylandPopup();
+ 
++  virtual void ForceActivate() {}
++
+   scoped_refptr<base::SingleThreadTaskRunner> ui_task_runner() {
+     return ui_task_runner_;
+   }
+-- 
+2.34.1
+

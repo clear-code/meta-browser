@@ -1,0 +1,28 @@
+From ace34a275988359f98abc43239e4eb096694c58a Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Mon, 28 Jun 2021 14:20:52 +0900
+Subject: [PATCH 05/10] [ozone/wayland] Fix cannot activate Omnibox without
+ real keyboard
+
+Signed-off-by: Takuro Ashie <ashie@clear-code.com>
+---
+ ui/views/focus/focus_manager.cc | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/ui/views/focus/focus_manager.cc b/ui/views/focus/focus_manager.cc
+index 99a502695d97b..87f767763e855 100644
+--- a/ui/views/focus/focus_manager.cc
++++ b/ui/views/focus/focus_manager.cc
+@@ -359,7 +359,9 @@ void FocusManager::SetFocusedViewWithReason(View* view,
+   if (view && !widget_->IsActive()) {
+     SetStoredFocusView(view);
+     widget_->Activate();
++#if !defined(USE_OZONE)
+     return;
++#endif
+   }
+ #endif
+ 
+-- 
+2.34.1
+

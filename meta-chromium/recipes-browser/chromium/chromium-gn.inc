@@ -23,6 +23,15 @@ SRC_URI += " \
     file://0014-ozone-wayland-don-t-build-xcb-for-pure-wayland-build.patch \
     file://0015-IWYU-add-memory-for-std-unique_ptr-in-base-CommandLi.patch \
     file://0001-Enable-to-build-against-missing-DRM_FORMAT_P010-linu.patch \
+    file://0002-ozone-wayland-Add-nullptr-check-on-activate-deactiva.patch \
+    file://0003-ozone-wayland-Enable-to-use-weston-keyboard-without-.patch \
+    file://0004-ozone-wayland-Apply-default-preedit-style-if-empty-s.patch \
+    file://0005-ozone-wayland-Fix-cannot-activate-Omnibox-without-re.patch \
+    file://0006-xkblayoutengine-set-pc101-as-default-keymap.patch \
+    file://0007-ozone-wayland-Force-set-keyboard-focus-when-input-co.patch \
+    file://0008-ozone-wayland-Force-set-pointer-focus-when-the-windo.patch \
+    file://0009-Remove-bashism-from-wrapper-script.patch \
+    file://0010-ozone-wayland-Avoid-crash-on-opening-the-file-select.patch \
 "
 
 SRC_URI_append_libc-musl = "\

@@ -1,0 +1,46 @@
+From 2c733bfaeadc0642623eb90466b521e8f2c5598a Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Thu, 1 Jul 2021 12:12:53 +0900
+Subject: [PATCH 06/10] xkblayoutengine: set pc101 as default keymap
+
+On the initial state, the engine has empty keymap and it's filled when a
+keyboard device is found. But when a system doesn't have physical
+keyboard and has a software keyboard, it can't find key codes sent from
+it even though it's generic one like `XKB_KEY_Return`. To enable to
+return such generic key codes, set a minimum default keymap.
+
+Signed-off-by: Takuro Ashie <ashie@clear-code.com>
+---
+ .../layout/xkb/xkb_keyboard_layout_engine.cc     | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
+
+diff --git a/ui/events/ozone/layout/xkb/xkb_keyboard_layout_engine.cc b/ui/events/ozone/layout/xkb/xkb_keyboard_layout_engine.cc
+index 60f28bd7af12f..fb5ed8eafee5f 100644
+--- a/ui/events/ozone/layout/xkb/xkb_keyboard_layout_engine.cc
++++ b/ui/events/ozone/layout/xkb/xkb_keyboard_layout_engine.cc
+@@ -663,6 +663,22 @@ XkbKeyboardLayoutEngine::XkbKeyboardLayoutEngine(
+   xkb_context_.reset(xkb_context_new(XKB_CONTEXT_NO_DEFAULT_INCLUDES));
+   xkb_context_include_path_append(xkb_context_.get(),
+                                   "/usr/share/X11/xkb");
++
++  struct xkb_rule_names names = {
++    .rules = NULL,
++    .model = "pc101",
++    .layout = "us",
++    .variant = "",
++    .options = "",
++  };
++  struct xkb_keymap *keymap =
++    xkb_keymap_new_from_names(xkb_context_.get(), &names,
++			      XKB_KEYMAP_COMPILE_NO_FLAGS);
++  if (keymap) {
++    VLOG(1) << "Set pc101 as default keymap";
++    SetKeymap(keymap);
++    xkb_keymap_unref(keymap);
++  }
+ }
+ 
+ XkbKeyboardLayoutEngine::~XkbKeyboardLayoutEngine() {
+-- 
+2.34.1
+

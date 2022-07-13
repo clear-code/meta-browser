@@ -1,7 +1,7 @@
-From 00747e8665aa5e52d2b1b904114f2a9db06a1cf5 Mon Sep 17 00:00:00 2001
+From 7cffbf155721e4728bef5adff0ef509edc7672c7 Mon Sep 17 00:00:00 2001
 From: Takuro Ashie <ashie@clear-code.com>
 Date: Tue, 8 Jun 2021 13:47:47 +0900
-Subject: [PATCH 1/8] Enable to build against missing DRM_FORMAT_P010 linux
+Subject: [PATCH 01/10] Enable to build against missing DRM_FORMAT_P010 linux
  kernel
 
 Signed-off-by: Takuro Ashie <ashie@clear-code.com>
@@ -10,7 +10,7 @@ Signed-off-by: Takuro Ashie <ashie@clear-code.com>
  1 file changed, 6 insertions(+)
 
 diff --git a/ui/gfx/linux/drm_util_linux.cc b/ui/gfx/linux/drm_util_linux.cc
-index e1372b6809260..c67a9d56f24db 100644
+index 416fc2303799e..ef503a08e86c7 100644
 --- a/ui/gfx/linux/drm_util_linux.cc
 +++ b/ui/gfx/linux/drm_util_linux.cc
 @@ -40,8 +40,10 @@ int GetFourCCFormatFromBufferFormat(gfx::BufferFormat format) {
@@ -46,5 +46,5 @@ index e1372b6809260..c67a9d56f24db 100644
      default:
        return false;
 -- 
-2.30.2
+2.34.1
 

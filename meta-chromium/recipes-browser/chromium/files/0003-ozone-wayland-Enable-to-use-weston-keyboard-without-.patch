@@ -1,0 +1,27 @@
+From 573ea0f7987fa5778e5bc2e7d1b784b5fa1e544a Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Mon, 21 Jun 2021 15:07:37 +0900
+Subject: [PATCH 03/10] [ozone/wayland] Enable to use weston-keyboard without
+ real keyboard
+
+Signed-off-by: Takuro Ashie <ashie@clear-code.com>
+---
+ ui/ozone/platform/wayland/host/wayland_input_method_context.cc | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/ui/ozone/platform/wayland/host/wayland_input_method_context.cc b/ui/ozone/platform/wayland/host/wayland_input_method_context.cc
+index efe811afa96b8..435f848649ee8 100644
+--- a/ui/ozone/platform/wayland/host/wayland_input_method_context.cc
++++ b/ui/ozone/platform/wayland/host/wayland_input_method_context.cc
+@@ -502,6 +502,8 @@ void WaylandInputMethodContext::MaybeUpdateActivated() {
+ 
+   WaylandWindow* window =
+       connection_->wayland_window_manager()->GetCurrentKeyboardFocusedWindow();
++  if (!window && !connection_->keyboard())
++      window = connection_->wayland_window_manager()->GetCurrentFocusedWindow();
+   // Activate Wayland IME only if 1) InputMethod in Chrome has some
+   // TextInputClient connected, and 2) the actual keyboard focus of Wayland
+   // is given to Chrome, which is notified via wl_keyboard::enter.
+-- 
+2.34.1
+
