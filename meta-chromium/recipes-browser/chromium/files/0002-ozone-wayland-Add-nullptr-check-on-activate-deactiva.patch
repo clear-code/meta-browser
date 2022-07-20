@@ -1,7 +1,7 @@
 From b85d1c981bbc02a954d5849c0010d608dbba4134 Mon Sep 17 00:00:00 2001
 From: Takuro Ashie <ashie@clear-code.com>
 Date: Fri, 18 Jun 2021 14:34:14 +0900
-Subject: [PATCH 02/10] [ozone/wayland] Add nullptr check on
+Subject: [PATCH 02/11] [ozone/wayland] Add nullptr check on
  activate/deactivate of text_input
 
 Signed-off-by: Takuro Ashie <ashie@clear-code.com>
