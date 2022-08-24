@@ -36,6 +36,7 @@ SRC_URI += " \
     file://0009-Remove-bashism-from-wrapper-script.patch \
     file://0010-ozone-wayland-Avoid-crash-on-opening-the-file-select.patch \
     file://0011-ozone-wayland-Grab-popup-if-its-parent-has-grab-as-w.patch \
+    file://0012-ozone-wayland-Enable-to-set-content-type-to-input-me.patch \
     file://fix-build-error-of-openscreen.patch \
     file://fix-build-error-of-snappy.patch \
 "
