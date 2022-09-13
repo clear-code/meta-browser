@@ -1,0 +1,170 @@
+From 0375fc619857a8b90292b3bbd88ad105c75849fc Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Wed, 24 Aug 2022 09:50:28 +0900
+Subject: [PATCH 11/11] [ozone/wayland] Enable to set content type to input
+ method
+
+Signed-off-by: Takuro Ashie <ashie@clear-code.com>
+---
+ ui/base/ime/linux/input_method_auralinux.cc   |  2 +-
+ .../ime/linux/linux_input_method_context.h    |  3 +
+ .../host/wayland_input_method_context.cc      | 61 +++++++++++++++++++
+ .../host/wayland_input_method_context.h       |  1 +
+ .../wayland/host/zwp_text_input_wrapper.h     |  1 +
+ .../wayland/host/zwp_text_input_wrapper_v1.cc |  4 ++
+ .../wayland/host/zwp_text_input_wrapper_v1.h  |  1 +
+ 7 files changed, 72 insertions(+), 1 deletion(-)
+
+diff --git a/ui/base/ime/linux/input_method_auralinux.cc b/ui/base/ime/linux/input_method_auralinux.cc
+index 81769b2a456b7..353b8d9c6f145 100644
+--- a/ui/base/ime/linux/input_method_auralinux.cc
++++ b/ui/base/ime/linux/input_method_auralinux.cc
+@@ -367,7 +367,7 @@ void InputMethodAuraLinux::OnTextInputTypeChanged(
+     const TextInputClient* client) {
+   UpdateContextFocusState();
+   InputMethodBase::OnTextInputTypeChanged(client);
+-  // TODO(yoichio): Support inputmode HTML attribute.
++  context_->SetTextInputType(text_input_type_);
+ }
+ 
+ void InputMethodAuraLinux::OnCaretBoundsChanged(const TextInputClient* client) {
+diff --git a/ui/base/ime/linux/linux_input_method_context.h b/ui/base/ime/linux/linux_input_method_context.h
+index 3c11d7bab90d4..37f80ef20c746 100644
+--- a/ui/base/ime/linux/linux_input_method_context.h
++++ b/ui/base/ime/linux/linux_input_method_context.h
+@@ -44,6 +44,9 @@ class COMPONENT_EXPORT(UI_BASE_IME_LINUX) LinuxInputMethodContext {
+   virtual void SetSurroundingText(const std::u16string& text,
+                                   const gfx::Range& selection_range) = 0;
+ 
++  // Tells the system IME the text input type.
++  virtual void SetTextInputType(TextInputType text_input_type) {}
++
+   // Resets the context.  A client needs to call OnTextInputTypeChanged() again
+   // before calling DispatchKeyEvent().
+   virtual void Reset() = 0;
+diff --git a/ui/ozone/platform/wayland/host/wayland_input_method_context.cc b/ui/ozone/platform/wayland/host/wayland_input_method_context.cc
+index 2bbbdfbe62b91..84405a5b8c931 100644
+--- a/ui/ozone/platform/wayland/host/wayland_input_method_context.cc
++++ b/ui/ozone/platform/wayland/host/wayland_input_method_context.cc
+@@ -320,6 +320,67 @@ void WaylandInputMethodContext::SetSurroundingText(
+   text_input_->SetSurroundingText(truncated_text, relocated_selection_range);
+ }
+ 
++void WaylandInputMethodContext::SetTextInputType(TextInputType text_input_type) {
++  uint32_t hint = ZWP_TEXT_INPUT_V1_CONTENT_HINT_NONE;
++  uint32_t purpose = ZWP_TEXT_INPUT_V1_CONTENT_PURPOSE_NORMAL;
++
++  switch (text_input_type) {
++    case TEXT_INPUT_TYPE_NONE:
++      break;
++    case TEXT_INPUT_TYPE_TEXT:
++      break;
++    case TEXT_INPUT_TYPE_PASSWORD:
++      hint = ZWP_TEXT_INPUT_V1_CONTENT_HINT_PASSWORD;
++      purpose = ZWP_TEXT_INPUT_V1_CONTENT_PURPOSE_PASSWORD;
++      break;
++    case TEXT_INPUT_TYPE_SEARCH:
++      break;
++    case TEXT_INPUT_TYPE_EMAIL:
++      purpose = ZWP_TEXT_INPUT_V1_CONTENT_PURPOSE_EMAIL;
++      break;
++    case TEXT_INPUT_TYPE_NUMBER:
++      purpose = ZWP_TEXT_INPUT_V1_CONTENT_PURPOSE_NUMBER;
++      break;
++    case TEXT_INPUT_TYPE_TELEPHONE:
++      purpose = ZWP_TEXT_INPUT_V1_CONTENT_PURPOSE_PHONE;
++      break;
++    case TEXT_INPUT_TYPE_URL:
++      purpose = ZWP_TEXT_INPUT_V1_CONTENT_PURPOSE_URL;
++      break;
++    case TEXT_INPUT_TYPE_DATE:
++      purpose = ZWP_TEXT_INPUT_V1_CONTENT_PURPOSE_DATE;
++      break;
++    case TEXT_INPUT_TYPE_DATE_TIME:
++      purpose = ZWP_TEXT_INPUT_V1_CONTENT_PURPOSE_DATETIME;
++      break;
++    case TEXT_INPUT_TYPE_DATE_TIME_LOCAL:
++      purpose = ZWP_TEXT_INPUT_V1_CONTENT_PURPOSE_DATETIME;
++      break;
++    case TEXT_INPUT_TYPE_MONTH:
++      break;
++    case TEXT_INPUT_TYPE_TIME:
++      purpose = ZWP_TEXT_INPUT_V1_CONTENT_PURPOSE_TIME;
++      break;
++    case TEXT_INPUT_TYPE_WEEK:
++      break;
++    case TEXT_INPUT_TYPE_TEXT_AREA:
++      hint = ZWP_TEXT_INPUT_V1_CONTENT_HINT_MULTILINE;
++      break;
++    case TEXT_INPUT_TYPE_CONTENT_EDITABLE:
++      break;
++    case TEXT_INPUT_TYPE_DATE_TIME_FIELD:
++      purpose = ZWP_TEXT_INPUT_V1_CONTENT_PURPOSE_DATETIME;
++      break;
++    case TEXT_INPUT_TYPE_NULL:
++      break;
++    default:
++      break;
++  }
++
++  if (text_input_)
++    text_input_->SetContentType(hint, purpose);
++}
++
+ void WaylandInputMethodContext::OnPreeditString(
+     base::StringPiece text,
+     const std::vector<SpanStyle>& spans,
+diff --git a/ui/ozone/platform/wayland/host/wayland_input_method_context.h b/ui/ozone/platform/wayland/host/wayland_input_method_context.h
+index 640376be9cfe2..e80478347cce9 100644
+--- a/ui/ozone/platform/wayland/host/wayland_input_method_context.h
++++ b/ui/ozone/platform/wayland/host/wayland_input_method_context.h
+@@ -46,6 +46,7 @@ class WaylandInputMethodContext : public LinuxInputMethodContext,
+   void SetCursorLocation(const gfx::Rect& rect) override;
+   void SetSurroundingText(const std::u16string& text,
+                           const gfx::Range& selection_range) override;
++  void SetTextInputType(TextInputType text_input_type) override;
+   void Reset() override;
+   void Focus() override;
+   void Blur() override;
+diff --git a/ui/ozone/platform/wayland/host/zwp_text_input_wrapper.h b/ui/ozone/platform/wayland/host/zwp_text_input_wrapper.h
+index 24a5f6ae8a3ee..79a3f5629ced3 100644
+--- a/ui/ozone/platform/wayland/host/zwp_text_input_wrapper.h
++++ b/ui/ozone/platform/wayland/host/zwp_text_input_wrapper.h
+@@ -86,6 +86,7 @@ class ZWPTextInputWrapper {
+   virtual void SetCursorRect(const gfx::Rect& rect) = 0;
+   virtual void SetSurroundingText(const std::string& text,
+                                   const gfx::Range& selection_range) = 0;
++  virtual void SetContentType(uint32_t hint, uint32_t purpose) = 0;
+ };
+ 
+ }  // namespace ui
+diff --git a/ui/ozone/platform/wayland/host/zwp_text_input_wrapper_v1.cc b/ui/ozone/platform/wayland/host/zwp_text_input_wrapper_v1.cc
+index c6494b4640510..c24c8eed813df 100644
+--- a/ui/ozone/platform/wayland/host/zwp_text_input_wrapper_v1.cc
++++ b/ui/ozone/platform/wayland/host/zwp_text_input_wrapper_v1.cc
+@@ -96,6 +96,10 @@ void ZWPTextInputWrapperV1::SetSurroundingText(
+       obj_.get(), text.c_str(), selection_range.start(), selection_range.end());
+ }
+ 
++void ZWPTextInputWrapperV1::SetContentType(uint32_t hint, uint32_t purpose) {
++  zwp_text_input_v1_set_content_type(obj_.get(), hint, purpose);
++}
++
+ void ZWPTextInputWrapperV1::ResetInputEventState() {
+   spans_.clear();
+   preedit_cursor_ = -1;
+diff --git a/ui/ozone/platform/wayland/host/zwp_text_input_wrapper_v1.h b/ui/ozone/platform/wayland/host/zwp_text_input_wrapper_v1.h
+index 588854e175bdd..6a8852d646d75 100644
+--- a/ui/ozone/platform/wayland/host/zwp_text_input_wrapper_v1.h
++++ b/ui/ozone/platform/wayland/host/zwp_text_input_wrapper_v1.h
+@@ -46,6 +46,7 @@ class ZWPTextInputWrapperV1 : public ZWPTextInputWrapper {
+   void SetCursorRect(const gfx::Rect& rect) override;
+   void SetSurroundingText(const std::string& text,
+                           const gfx::Range& selection_range) override;
++  void SetContentType(uint32_t hint, uint32_t purpose) override;
+ 
+  private:
+   void ResetInputEventState();
+-- 
+2.34.1
+

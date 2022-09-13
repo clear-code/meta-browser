@@ -32,6 +32,7 @@ SRC_URI += " \
     file://0008-ozone-wayland-Force-set-pointer-focus-when-the-windo.patch \
     file://0009-Remove-bashism-from-wrapper-script.patch \
     file://0010-ozone-wayland-Avoid-crash-on-opening-the-file-select.patch \
+    file://0011-ozone-wayland-Enable-to-set-content-type-to-input-me.patch \
 "
 
 SRC_URI_append_libc-musl = "\

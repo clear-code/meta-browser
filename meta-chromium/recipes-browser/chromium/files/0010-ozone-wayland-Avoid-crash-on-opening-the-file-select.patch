@@ -1,7 +1,7 @@
 From f9020a3ee8a2218afb05f52b375ae0c7da523c72 Mon Sep 17 00:00:00 2001
 From: Takuro Ashie <ashie@clear-code.com>
 Date: Fri, 1 Jul 2022 14:29:02 +0900
-Subject: [PATCH 10/10] [ozone/wayland] Avoid crash on opening the file
+Subject: [PATCH 10/11] [ozone/wayland] Avoid crash on opening the file
  selector dialog
 
 Signed-off-by: Takuro Ashie <ashie@clear-code.com>
