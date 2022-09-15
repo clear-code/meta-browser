@@ -100,9 +100,6 @@ DEPENDS += " \
 "
 DEPEND_append_runtime-llvm = " compiler-rt-native libcxx-native"
 
-# The wrapper script we use from upstream requires bash.
-RDEPENDS_${PN} = "bash"
-
 COMPATIBLE_MACHINE = "(-)"
 COMPATIBLE_MACHINE_aarch64 = "(.*)"
 COMPATIBLE_MACHINE_armv6 = "(.*)"
