@@ -26,7 +26,7 @@ GN_ARGS += "\
 "
 
 # The chromium binary must always be started with those arguments.
-CHROMIUM_EXTRA_ARGS:append = " --ozone-platform=wayland"
+CHROMIUM_EXTRA_ARGS_append = " --ozone-platform=wayland"
 
 # Angle is not used by Wayland yet, but it was still built. It wasn't a problem
 # until wayland-protocols were updated to 1.20 in newest yocto releases, which
