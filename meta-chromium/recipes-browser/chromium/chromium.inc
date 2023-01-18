@@ -15,7 +15,7 @@ TOOLCHAIN = "clang"
 
 # By default, clang.bbclass sets TOOLCHAIN:class-native to "gcc", but we want
 # to build the native recipes (e.g. GN) with clang too.
-TOOLCHAIN:class-native = "clang"
+TOOLCHAIN_class-native = "clang"
 
 # This makes the target build use libc++ and compiler_rt instead of the GNU
 # runtime, just like upstream does. The native binaries compiled and run as
@@ -38,7 +38,7 @@ LIBCPLUSPLUS = "-stdlib=libc++"
 # newer meta-clang in https://github.com/kraj/meta-clang/commit/cda2283e4cf3c90ea42b43dbc3a2268be6655670)
 DEPENDS += "libcxx"
 
-inherit mime-xdg python3native
+inherit python3native
 DEPENDS += "python3-setuptools-native"
 
 # Chromium itself is licensed under the 3-clause BSD license. However, it
