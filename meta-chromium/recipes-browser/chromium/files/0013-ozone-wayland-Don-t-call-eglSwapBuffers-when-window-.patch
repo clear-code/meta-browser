@@ -1,0 +1,30 @@
+From d9ce963d7851e122abfd6d3fad7ee29f99713c92 Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Sat, 25 Feb 2023 13:06:22 +0900
+Subject: [PATCH 13/13] [ozone/wayland] Don't call eglSwapBuffers() when window
+ isn't visible
+
+It causes crash or dead lock with --in-process-gpu.
+
+Signed-off-by: Takuro Ashie <ashie@clear-code.com>
+---
+ ui/ozone/platform/wayland/gpu/gl_surface_wayland.cc | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/ui/ozone/platform/wayland/gpu/gl_surface_wayland.cc b/ui/ozone/platform/wayland/gpu/gl_surface_wayland.cc
+index 12441379f5867..9d01df7e4e608 100644
+--- a/ui/ozone/platform/wayland/gpu/gl_surface_wayland.cc
++++ b/ui/ozone/platform/wayland/gpu/gl_surface_wayland.cc
+@@ -70,6 +70,9 @@ EGLConfig GLSurfaceWayland::GetConfig() {
+ }
+ 
+ gfx::SwapResult GLSurfaceWayland::SwapBuffers(PresentationCallback callback) {
++  if (!window_->IsVisible())
++    return gfx::SwapResult::SWAP_FAILED;
++
+   UpdateVisualSize();
+   return gl::NativeViewGLSurfaceEGL::SwapBuffers(std::move(callback));
+ }
+-- 
+2.34.1
+

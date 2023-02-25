@@ -1,7 +1,7 @@
 From 65d36d6b314e17db758b83b18799b3ffffc6adca Mon Sep 17 00:00:00 2001
 From: Takuro Ashie <ashie@clear-code.com>
 Date: Wed, 20 Jul 2022 15:01:31 +0900
-Subject: [PATCH 11/12] [ozone/wayland] Grab popup if its parent has grab as
+Subject: [PATCH 11/13] [ozone/wayland] Grab popup if its parent has grab as
  well
 
 It fixes the crash on opening child menu of 3-dot menu.

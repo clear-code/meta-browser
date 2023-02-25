@@ -1,7 +1,7 @@
 From f3ca461285b0fbcfc071a6435d97f9f492cde5f6 Mon Sep 17 00:00:00 2001
 From: Takuro Ashie <ashie@clear-code.com>
 Date: Wed, 24 Aug 2022 09:50:28 +0900
-Subject: [PATCH 12/12] [ozone/wayland] Enable to set content type to input
+Subject: [PATCH 12/13] [ozone/wayland] Enable to set content type to input
  method
 
 Signed-off-by: Takuro Ashie <ashie@clear-code.com>
