@@ -1,7 +1,7 @@
-From 70b5b5482e4465af52c2b3778d31f50ea653b939 Mon Sep 17 00:00:00 2001
+From e6e745aa4ec9ac06139a0fac3f1c56dce6a98280 Mon Sep 17 00:00:00 2001
 From: Takuro Ashie <ashie@clear-code.com>
 Date: Tue, 15 Mar 2022 18:00:47 +0900
-Subject: [PATCH] Remove bashism from wrapper script
+Subject: [PATCH 09/11] Remove bashism from wrapper script
 
 Signed-off-by: Takuro Ashie <ashie@clear-code.com>
 ---
@@ -34,5 +34,5 @@ index 03c7ac4a77154..1b401eabd03b0 100755
 -exec -a "$0" "$HERE/@@PROGNAME@@" ${CHROME_EXTRA_ARGS} "$@"
 +exec "$HERE/@@PROGNAME@@" ${CHROME_EXTRA_ARGS} "$@"
 -- 
-2.32.0
+2.34.1
 

@@ -28,8 +28,10 @@ SRC_URI += " \
     file://0006-xkblayoutengine-set-pc101-as-default-keymap.patch \
     file://0007-ozone-wayland-Force-set-keyboard-focus-when-input-co.patch \
     file://0008-ozone-wayland-Force-set-pointer-focus-when-the-windo.patch \
+    file://0009-Remove-bashism-from-wrapper-script.patch \
+    file://0010-ozone-Avoid-crash-on-opening-the-file-selector-dialo.patch \
+    file://0011-ozone-wayland-Don-t-call-eglSwapBuffers-when-window-.patch \
     file://fix-build-error-of-snappy.patch \
-    file://0001-Remove-bashism-from-wrapper-script.patch \
 "
 
 SRC_URI_append_libc-musl = "\

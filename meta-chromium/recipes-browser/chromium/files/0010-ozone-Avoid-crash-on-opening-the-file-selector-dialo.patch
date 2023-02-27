@@ -1,0 +1,87 @@
+From 93606cb0cef59467e5b7f278c6cb719471fa1c68 Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Fri, 1 Jul 2022 14:29:02 +0900
+Subject: [PATCH 10/11] ozone: Avoid crash on opening the file selector dialog
+
+Signed-off-by: Takuro Ashie <ashie@clear-code.com>
+---
+ .../download/save_package_file_picker.cc      |  4 ++++
+ .../print_preview/pdf_printer_handler.cc      | 22 ++++++++++++++-----
+ ui/shell_dialogs/shell_dialog_linux.cc        |  4 ++++
+ 3 files changed, 24 insertions(+), 6 deletions(-)
+
+diff --git a/chrome/browser/download/save_package_file_picker.cc b/chrome/browser/download/save_package_file_picker.cc
+index 6ecbe21c4d03c..52493d891cf1a 100644
+--- a/chrome/browser/download/save_package_file_picker.cc
++++ b/chrome/browser/download/save_package_file_picker.cc
+@@ -43,7 +43,11 @@ namespace {
+ 
+ // If false, we don't prompt the user as to where to save the file.  This
+ // exists only for testing.
++#if defined(OS_LINUX) && defined(USE_OZONE)
++bool g_should_prompt_for_filename = false;
++#else
+ bool g_should_prompt_for_filename = true;
++#endif
+ 
+ void OnSavePackageDownloadCreated(download::DownloadItem* download) {
+   ChromeDownloadManagerDelegate::DisableSafeBrowsing(download);
+diff --git a/chrome/browser/ui/webui/print_preview/pdf_printer_handler.cc b/chrome/browser/ui/webui/print_preview/pdf_printer_handler.cc
+index 6c43d5381f7c8..d9710ee7b9995 100644
+--- a/chrome/browser/ui/webui/print_preview/pdf_printer_handler.cc
++++ b/chrome/browser/ui/webui/print_preview/pdf_printer_handler.cc
+@@ -59,6 +59,12 @@ namespace printing {
+ 
+ namespace {
+ 
++#if defined(OS_LINUX) && defined(USE_OZONE)
++bool g_should_prompt_for_filename = false;
++#else
++bool g_should_prompt_for_filename = true;
++#endif
++
+ constexpr base::FilePath::CharType kPdfExtension[] = FILE_PATH_LITERAL("pdf");
+ 
+ class PrintingContextDelegate : public PrintingContext::Delegate {
+@@ -423,12 +429,16 @@ void PdfPrinterHandler::OnDirectorySelected(const base::FilePath& filename,
+   file_type_info.allowed_paths =
+       ui::SelectFileDialog::FileTypeInfo::NATIVE_PATH;
+ 
+-  select_file_dialog_ =
+-      ui::SelectFileDialog::Create(this, nullptr /*policy already checked*/);
+-  select_file_dialog_->SelectFile(
+-      ui::SelectFileDialog::SELECT_SAVEAS_FILE, std::u16string(), path,
+-      &file_type_info, 0, base::FilePath::StringType(),
+-      platform_util::GetTopLevel(preview_web_contents_->GetNativeView()), NULL);
++  if (g_should_prompt_for_filename) {
++    select_file_dialog_ =
++        ui::SelectFileDialog::Create(this, nullptr /*policy already checked*/);
++    select_file_dialog_->SelectFile(
++        ui::SelectFileDialog::SELECT_SAVEAS_FILE, std::u16string(), path,
++        &file_type_info, 0, base::FilePath::StringType(),
++        platform_util::GetTopLevel(preview_web_contents_->GetNativeView()), NULL);
++  } else {
++    FileSelected(path, 0, NULL);
++  }
+ }
+ 
+ base::FilePath PdfPrinterHandler::GetSaveLocation() const {
+diff --git a/ui/shell_dialogs/shell_dialog_linux.cc b/ui/shell_dialogs/shell_dialog_linux.cc
+index f97dc0ed64147..78fd283632cdd 100644
+--- a/ui/shell_dialogs/shell_dialog_linux.cc
++++ b/ui/shell_dialogs/shell_dialog_linux.cc
+@@ -32,7 +32,11 @@ SelectFileDialog* CreateSelectFileDialog(
+   if (shell_dialogs)
+     return shell_dialogs->CreateSelectFileDialog(listener, std::move(policy));
+ #endif
++#if defined(USE_OZONE)
++  // Disable the file picker explicitly on embedded systems
++#else
+   NOTIMPLEMENTED();
++#endif
+   return nullptr;
+ }
+ 
+-- 
+2.34.1
+

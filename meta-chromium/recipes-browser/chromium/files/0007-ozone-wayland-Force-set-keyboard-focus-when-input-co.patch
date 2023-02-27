@@ -1,7 +1,7 @@
-From cc726796a8f00ab1a30524ebe6d17b13803e9a28 Mon Sep 17 00:00:00 2001
+From b0defdec315a8e63a94705d0e574b0c678fd45b4 Mon Sep 17 00:00:00 2001
 From: Takuro Ashie <ashie@clear-code.com>
 Date: Thu, 1 Jul 2021 15:03:28 +0900
-Subject: [PATCH 7/8] [ozone/wayland] Force set keyboard focus when input
+Subject: [PATCH 07/11] [ozone/wayland] Force set keyboard focus when input
  context gets focus
 
 Signed-off-by: Takuro Ashie <ashie@clear-code.com>
@@ -79,5 +79,5 @@ index 3c810edca9799..fa454f488b038 100644
      return ui_task_runner_;
    }
 -- 
-2.30.2
+2.34.1
 
