@@ -24,6 +24,8 @@ SRC_URI += " \
     file://0015-drop-gsimple-template-names.patch \
     file://0016-cast-to-bool-to-avoid-constexpr-error.patch \
     file://0001-Enable-to-build-against-missing-DRM_FORMAT_P010-linu.patch \
+    file://0002-Remove-needless-dependency-to-importlib_metadata-of-.patch \
+    file://0003-Fix-a-std-map-initialization-to-build-against-older-.patch \
 "
 
 SRC_URI_append_libc-musl = "\

@@ -1,0 +1,54 @@
+From 29f84c9b169d6fe8454185cadc5b2a3316404f7b Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Wed, 8 Mar 2023 09:37:27 +0900
+Subject: [PATCH 3/3] Fix a std::map initialization to build against older
+ compiler
+
+| ../../chrome/common/extensions/chrome_manifest_url_handlers.cc:101:7: error: no matching constructor for initialization of 'std::map<const char *, std::reference_wrapper<const absl::optional<std::string>>>' (aka 'map<const char *, reference_wrapper<const optional<basic_string<char>>>>')
+|       std::map<const char*,
+|       ^
+
+Signed-off-by: Takuro Ashie <ashie@clear-code.com>
+---
+ .../chrome_manifest_url_handlers.cc           | 25 +++++++++----------
+ 1 file changed, 12 insertions(+), 13 deletions(-)
+
+diff --git a/chrome/common/extensions/chrome_manifest_url_handlers.cc b/chrome/common/extensions/chrome_manifest_url_handlers.cc
+index f7d240707f4ad..9bf6ae3371c77 100644
+--- a/chrome/common/extensions/chrome_manifest_url_handlers.cc
++++ b/chrome/common/extensions/chrome_manifest_url_handlers.cc
+@@ -97,19 +97,18 @@ bool URLOverridesHandler::Parse(Extension* extension, std::u16string* error) {
+ 
+   using UrlOverrideInfo = api::chrome_url_overrides::UrlOverrideInfo;
+   auto url_overrides = std::make_unique<URLOverrides>();
+-  auto property_map =
+-      std::map<const char*,
+-               std::reference_wrapper<const absl::optional<std::string>>>{
+-          {UrlOverrideInfo::kNewtab,
+-           std::ref(manifest_keys.chrome_url_overrides.newtab)},
+-          {UrlOverrideInfo::kBookmarks,
+-           std::ref(manifest_keys.chrome_url_overrides.bookmarks)},
+-          {UrlOverrideInfo::kHistory,
+-           std::ref(manifest_keys.chrome_url_overrides.history)},
+-          {UrlOverrideInfo::kActivationmessage,
+-           std::ref(manifest_keys.chrome_url_overrides.activationmessage)},
+-          {UrlOverrideInfo::kKeyboard,
+-           std::ref(manifest_keys.chrome_url_overrides.keyboard)}};
++  std::map<const char*,
++           std::reference_wrapper<const absl::optional<std::string>>> property_map;
++  property_map.insert(std::make_pair(UrlOverrideInfo::kNewtab,
++                                     std::ref(manifest_keys.chrome_url_overrides.newtab)));
++  property_map.insert(std::make_pair(UrlOverrideInfo::kBookmarks,
++                                     std::ref(manifest_keys.chrome_url_overrides.bookmarks)));
++  property_map.insert(std::make_pair(UrlOverrideInfo::kHistory,
++                                     std::ref(manifest_keys.chrome_url_overrides.history)));
++  property_map.insert(std::make_pair(UrlOverrideInfo::kActivationmessage,
++                                     std::ref(manifest_keys.chrome_url_overrides.activationmessage)));
++  property_map.insert(std::make_pair(UrlOverrideInfo::kKeyboard,
++                                     std::ref(manifest_keys.chrome_url_overrides.keyboard)));
+ 
+   for (const auto& property : property_map) {
+     if (!property.second.get())
+-- 
+2.34.1
+
