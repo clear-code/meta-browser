@@ -24,6 +24,8 @@ SRC_URI += " \
     file://0013-Fix-html_minifier-script-for-node-v12.patch \
     file://0014-grit-util-py-remove-deprecated-mode-for-open.patch \
     file://0015-Avoid-inadvertently-adding-a-wayland-dependency.patch \
+    file://0001-Enable-to-build-against-missing-DRM_FORMAT_P010-linu.patch \
+    file://0002-Remove-needless-dependency-to-importlib_metadata-of-.patch \
 "
 
 SRC_URI_append_libc-musl = "\

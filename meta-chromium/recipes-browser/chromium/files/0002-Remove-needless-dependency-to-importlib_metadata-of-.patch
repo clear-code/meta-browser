@@ -1,0 +1,32 @@
+From 8aa2cbc3ed5d6020529f1392339e08d9d405dbf5 Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Tue, 7 Mar 2023 18:03:52 +0900
+Subject: [PATCH 2/2] Remove needless dependency to importlib_metadata of
+ Python
+
+Signed-off-by: Takuro Ashie <ashie@clear-code.com>
+---
+ third_party/mako/mako/mako/compat.py | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/third_party/mako/mako/mako/compat.py b/third_party/mako/mako/mako/compat.py
+index 48df30d6e2294..e9c0179103915 100644
+--- a/third_party/mako/mako/mako/compat.py
++++ b/third_party/mako/mako/mako/compat.py
+@@ -61,13 +61,6 @@ def exception_as():
+ def exception_name(exc):
+     return exc.__class__.__name__
+ 
+-
+-if py38:
+-    from importlib import metadata as importlib_metadata
+-else:
+-    import importlib_metadata  # noqa
+-
+-
+ def importlib_metadata_get(group):
+     ep = importlib_metadata.entry_points()
+     if hasattr(ep, "select"):
+-- 
+2.34.1
+
