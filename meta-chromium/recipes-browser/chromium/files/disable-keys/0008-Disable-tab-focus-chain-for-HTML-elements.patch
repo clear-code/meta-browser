@@ -1,0 +1,39 @@
+From 36c07ad9fc830b1e6cb7cf070a73b6a3c87479ae Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Tue, 23 Jan 2024 17:34:27 +0900
+Subject: [PATCH 08/10] Disable tab focus chain for HTML elements
+
+---
+ third_party/blink/renderer/core/page/page.cc | 2 +-
+ third_party/blink/renderer/core/page/page.h  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/third_party/blink/renderer/core/page/page.cc b/third_party/blink/renderer/core/page/page.cc
+index 84b3aec95243f..bcf75c8d77f45 100644
+--- a/third_party/blink/renderer/core/page/page.cc
++++ b/third_party/blink/renderer/core/page/page.cc
+@@ -215,7 +215,7 @@ Page::Page(base::PassKey<Page>,
+       validation_message_client_(
+           MakeGarbageCollected<ValidationMessageClientImpl>(*this)),
+       opened_by_dom_(false),
+-      tab_key_cycles_through_elements_(true),
++      tab_key_cycles_through_elements_(false),
+       inspector_device_scale_factor_override_(1),
+       lifecycle_state_(mojom::blink::PageLifecycleState::New()),
+       is_ordinary_(is_ordinary),
+diff --git a/third_party/blink/renderer/core/page/page.h b/third_party/blink/renderer/core/page/page.h
+index f5cc0f499ce38..b318c6ab51ffd 100644
+--- a/third_party/blink/renderer/core/page/page.h
++++ b/third_party/blink/renderer/core/page/page.h
+@@ -251,7 +251,7 @@ class CORE_EXPORT Page final : public GarbageCollected<Page>,
+   const OverscrollController& GetOverscrollController() const;
+ 
+   void SetTabKeyCyclesThroughElements(bool b) {
+-    tab_key_cycles_through_elements_ = b;
++    //tab_key_cycles_through_elements_ = b;
+   }
+   bool TabKeyCyclesThroughElements() const {
+     return tab_key_cycles_through_elements_;
+-- 
+2.34.1
+

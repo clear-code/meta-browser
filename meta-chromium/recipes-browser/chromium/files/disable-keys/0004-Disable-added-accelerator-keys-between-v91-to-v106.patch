@@ -1,0 +1,47 @@
+From cb5a42ebce9ed0e57021c622c83f84121333d1fd Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Fri, 12 Jan 2024 14:40:26 +0900
+Subject: [PATCH 04/10] Disable added accelerator keys between v91 to v106
+
+* IDC_CLOSE_TAB (VKEY_CLOSE: 0x0C0203 AC Close)
+* IDC_NEW_TAB (VKEY_NEW: 0x0C0201 AC New)
+* IDC_TOGGLE_QUICK_COMMANDS (Ctrl + Space)
+* IDC_RUN_SCREEN_AI_VISUAL_ANNOTATIONS (Ctrl + Shift + S)
+---
+ chrome/browser/ui/views/accelerator_table.cc | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/chrome/browser/ui/views/accelerator_table.cc b/chrome/browser/ui/views/accelerator_table.cc
+index 624cf1484f216..303b7ea0545f5 100644
+--- a/chrome/browser/ui/views/accelerator_table.cc
++++ b/chrome/browser/ui/views/accelerator_table.cc
+@@ -145,8 +145,8 @@ const AcceleratorMapping kAcceleratorMap[] = {
+     {ui::VKEY_BROWSER_REFRESH, ui::EF_NONE, IDC_RELOAD},
+     {ui::VKEY_BROWSER_REFRESH, ui::EF_CONTROL_DOWN, IDC_RELOAD_BYPASSING_CACHE},
+     {ui::VKEY_BROWSER_REFRESH, ui::EF_SHIFT_DOWN, IDC_RELOAD_BYPASSING_CACHE},
+-    {ui::VKEY_CLOSE, ui::EF_NONE, IDC_CLOSE_TAB},
+-    {ui::VKEY_NEW, ui::EF_NONE, IDC_NEW_TAB},
++    // {ui::VKEY_CLOSE, ui::EF_NONE, IDC_CLOSE_TAB},
++    // {ui::VKEY_NEW, ui::EF_NONE, IDC_NEW_TAB},
+ #endif  // BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
+ 
+ #if BUILDFLAG(IS_CHROMEOS)
+@@ -233,12 +233,12 @@ const AcceleratorMapping kAcceleratorMap[] = {
+     // TODO(https://crbug.com/1016439): This is a temporary hotkey. Chrome OS
+     // uses this for switching IMEs, but since this feature is only exposed via
+     // command line flag at the moment, we'll exclude them entirely for now.
+-    {ui::VKEY_SPACE, ui::EF_CONTROL_DOWN, IDC_TOGGLE_QUICK_COMMANDS},
++    // {ui::VKEY_SPACE, ui::EF_CONTROL_DOWN, IDC_TOGGLE_QUICK_COMMANDS},
+ #endif  // !BUILDFLAG(IS_CHROMEOS)
+ #endif  // !BUILDFLAG(IS_MAC)
+ #if BUILDFLAG(IS_LINUX) || BUILDFLAG(IS_CHROMEOS)
+-    {ui::VKEY_S, ui::EF_CONTROL_DOWN | ui::EF_SHIFT_DOWN,
+-     IDC_RUN_SCREEN_AI_VISUAL_ANNOTATIONS},
++    // {ui::VKEY_S, ui::EF_CONTROL_DOWN | ui::EF_SHIFT_DOWN,
++    //  IDC_RUN_SCREEN_AI_VISUAL_ANNOTATIONS},
+ #endif
+ };
+ 
+-- 
+2.34.1
+

@@ -1,0 +1,104 @@
+From d913d77dc5cdb28b621cb1f95a696eb6e837a771 Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Fri, 12 Jan 2024 15:24:06 +0900
+Subject: [PATCH 05/10] Disable remaining accelerator keys
+
+A key which isn't disabled in v91:
+
+* IDC_TAB_SEARCH (Ctrl + Shift + A)
+
+Tab switching keys, they aren't affected in actual if creating new tab
+is completely disabled:
+
+* IDC_SELECT_TAB_0 (Alt + 1)
+* IDC_SELECT_TAB_1 (Alt + 2)
+* IDC_SELECT_TAB_2 (Alt + 3)
+* IDC_SELECT_TAB_3 (Alt + 4)
+* IDC_SELECT_TAB_4 (Alt + 5)
+* IDC_SELECT_TAB_5 (Alt + 6)
+* IDC_SELECT_TAB_6 (Alt + 7)
+* IDC_SELECT_TAB_7 (Alt + 8)
+
+Keys that are disabled on kiosk mode:
+
+* IDC_DEV_TOOLS (Ctrl + Shift + I)
+* IDC_DEV_TOOLS_INSPECT (Ctrl + Shift + C)
+* IDC_FOCUS_BOOKMARKS (Alt + Shift + B)
+---
+ chrome/browser/ui/views/accelerator_table.cc | 44 ++++++++++----------
+ 1 file changed, 22 insertions(+), 22 deletions(-)
+
+diff --git a/chrome/browser/ui/views/accelerator_table.cc b/chrome/browser/ui/views/accelerator_table.cc
+index 303b7ea0545f5..aaa57e0376309 100644
+--- a/chrome/browser/ui/views/accelerator_table.cc
++++ b/chrome/browser/ui/views/accelerator_table.cc
+@@ -47,8 +47,8 @@ const AcceleratorMapping kAcceleratorMap[] = {
+     // {ui::VKEY_W, ui::EF_SHIFT_DOWN | ui::EF_PLATFORM_ACCELERATOR,
+     //  IDC_CLOSE_WINDOW},
+     // {ui::VKEY_F, ui::EF_PLATFORM_ACCELERATOR, IDC_FIND},
+-    {ui::VKEY_A, ui::EF_SHIFT_DOWN | ui::EF_PLATFORM_ACCELERATOR,
+-     IDC_TAB_SEARCH},
++    // {ui::VKEY_A, ui::EF_SHIFT_DOWN | ui::EF_PLATFORM_ACCELERATOR,
++    //  IDC_TAB_SEARCH},
+     // {ui::VKEY_G, ui::EF_PLATFORM_ACCELERATOR, IDC_FIND_NEXT},
+     // {ui::VKEY_G, ui::EF_SHIFT_DOWN | ui::EF_PLATFORM_ACCELERATOR,
+     //  IDC_FIND_PREVIOUS},
+@@ -94,22 +94,22 @@ const AcceleratorMapping kAcceleratorMap[] = {
+     // {ui::VKEY_8, ui::EF_PLATFORM_ACCELERATOR, IDC_SELECT_TAB_7},
+     // {ui::VKEY_NUMPAD8, ui::EF_PLATFORM_ACCELERATOR, IDC_SELECT_TAB_7},
+ #if BUILDFLAG(IS_LINUX)
+-    {ui::VKEY_1, ui::EF_ALT_DOWN, IDC_SELECT_TAB_0},
+-    {ui::VKEY_NUMPAD1, ui::EF_ALT_DOWN, IDC_SELECT_TAB_0},
+-    {ui::VKEY_2, ui::EF_ALT_DOWN, IDC_SELECT_TAB_1},
+-    {ui::VKEY_NUMPAD2, ui::EF_ALT_DOWN, IDC_SELECT_TAB_1},
+-    {ui::VKEY_3, ui::EF_ALT_DOWN, IDC_SELECT_TAB_2},
+-    {ui::VKEY_NUMPAD3, ui::EF_ALT_DOWN, IDC_SELECT_TAB_2},
+-    {ui::VKEY_4, ui::EF_ALT_DOWN, IDC_SELECT_TAB_3},
+-    {ui::VKEY_NUMPAD4, ui::EF_ALT_DOWN, IDC_SELECT_TAB_3},
+-    {ui::VKEY_5, ui::EF_ALT_DOWN, IDC_SELECT_TAB_4},
+-    {ui::VKEY_NUMPAD5, ui::EF_ALT_DOWN, IDC_SELECT_TAB_4},
+-    {ui::VKEY_6, ui::EF_ALT_DOWN, IDC_SELECT_TAB_5},
+-    {ui::VKEY_NUMPAD6, ui::EF_ALT_DOWN, IDC_SELECT_TAB_5},
+-    {ui::VKEY_7, ui::EF_ALT_DOWN, IDC_SELECT_TAB_6},
+-    {ui::VKEY_NUMPAD7, ui::EF_ALT_DOWN, IDC_SELECT_TAB_6},
+-    {ui::VKEY_8, ui::EF_ALT_DOWN, IDC_SELECT_TAB_7},
+-    {ui::VKEY_NUMPAD8, ui::EF_ALT_DOWN, IDC_SELECT_TAB_7},
++    // {ui::VKEY_1, ui::EF_ALT_DOWN, IDC_SELECT_TAB_0},
++    // {ui::VKEY_NUMPAD1, ui::EF_ALT_DOWN, IDC_SELECT_TAB_0},
++    // {ui::VKEY_2, ui::EF_ALT_DOWN, IDC_SELECT_TAB_1},
++    // {ui::VKEY_NUMPAD2, ui::EF_ALT_DOWN, IDC_SELECT_TAB_1},
++    // {ui::VKEY_3, ui::EF_ALT_DOWN, IDC_SELECT_TAB_2},
++    // {ui::VKEY_NUMPAD3, ui::EF_ALT_DOWN, IDC_SELECT_TAB_2},
++    // {ui::VKEY_4, ui::EF_ALT_DOWN, IDC_SELECT_TAB_3},
++    // {ui::VKEY_NUMPAD4, ui::EF_ALT_DOWN, IDC_SELECT_TAB_3},
++    // {ui::VKEY_5, ui::EF_ALT_DOWN, IDC_SELECT_TAB_4},
++    // {ui::VKEY_NUMPAD5, ui::EF_ALT_DOWN, IDC_SELECT_TAB_4},
++    // {ui::VKEY_6, ui::EF_ALT_DOWN, IDC_SELECT_TAB_5},
++    // {ui::VKEY_NUMPAD6, ui::EF_ALT_DOWN, IDC_SELECT_TAB_5},
++    // {ui::VKEY_7, ui::EF_ALT_DOWN, IDC_SELECT_TAB_6},
++    // {ui::VKEY_NUMPAD7, ui::EF_ALT_DOWN, IDC_SELECT_TAB_6},
++    // {ui::VKEY_8, ui::EF_ALT_DOWN, IDC_SELECT_TAB_7},
++    // {ui::VKEY_NUMPAD8, ui::EF_ALT_DOWN, IDC_SELECT_TAB_7},
+     // {ui::VKEY_BROWSER_FAVORITES, ui::EF_NONE, IDC_SHOW_BOOKMARK_BAR},
+ #endif  // BUILDFLAG(IS_LINUX) && !BUILDFLAG(IS_CHROMEOS)
+     // {ui::VKEY_B, ui::EF_SHIFT_DOWN | ui::EF_PLATFORM_ACCELERATOR,
+@@ -203,12 +203,12 @@ const AcceleratorMapping kAcceleratorMap[] = {
+ #if BUILDFLAG(ENABLE_PRINTING)
+     // {ui::VKEY_P, ui::EF_SHIFT_DOWN | ui::EF_CONTROL_DOWN, IDC_BASIC_PRINT},
+ #endif  // ENABLE_PRINTING
+-    {ui::VKEY_I, ui::EF_SHIFT_DOWN | ui::EF_CONTROL_DOWN, IDC_DEV_TOOLS},
++    // {ui::VKEY_I, ui::EF_SHIFT_DOWN | ui::EF_CONTROL_DOWN, IDC_DEV_TOOLS},
+     // {ui::VKEY_J, ui::EF_SHIFT_DOWN | ui::EF_CONTROL_DOWN,
+     //  IDC_DEV_TOOLS_CONSOLE},
+-    {ui::VKEY_C, ui::EF_SHIFT_DOWN | ui::EF_CONTROL_DOWN,
+-     IDC_DEV_TOOLS_INSPECT},
+-    {ui::VKEY_B, ui::EF_SHIFT_DOWN | ui::EF_ALT_DOWN, IDC_FOCUS_BOOKMARKS},
++    // {ui::VKEY_C, ui::EF_SHIFT_DOWN | ui::EF_CONTROL_DOWN,
++    //  IDC_DEV_TOOLS_INSPECT},
++    // {ui::VKEY_B, ui::EF_SHIFT_DOWN | ui::EF_ALT_DOWN, IDC_FOCUS_BOOKMARKS},
+     // {ui::VKEY_A, ui::EF_SHIFT_DOWN | ui::EF_ALT_DOWN,
+     //  IDC_FOCUS_INACTIVE_POPUP_FOR_ACCESSIBILITY},
+     // {ui::VKEY_D, ui::EF_ALT_DOWN, IDC_FOCUS_LOCATION},
+-- 
+2.34.1
+

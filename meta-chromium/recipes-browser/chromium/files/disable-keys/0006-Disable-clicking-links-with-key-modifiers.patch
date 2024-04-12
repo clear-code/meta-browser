@@ -1,0 +1,44 @@
+From f56008c287f2bf455351e62e35d9100d2c98af75 Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Tue, 23 Jan 2024 17:01:13 +0900
+Subject: [PATCH 06/10] Disable clicking links with key modifiers
+
+* Ctrl + link click
+* Ctrl + Shift + link click
+* Alt + link click
+
+This patch includes the following fix:
+
+  Author: Hara Tomoyuki <tomoyuki.hara@miraclelinux.biz>
+  Date:   Thu Nov 24 11:54:18 2022 +0900
+
+      chromium-ozone-wayland: Disable the shortcut key for Download link.(FCNCHMI-227)
+---
+ third_party/blink/renderer/core/loader/navigation_policy.cc | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/third_party/blink/renderer/core/loader/navigation_policy.cc b/third_party/blink/renderer/core/loader/navigation_policy.cc
+index 0bf938d0eaa1d..3865d9d936a6c 100644
+--- a/third_party/blink/renderer/core/loader/navigation_policy.cc
++++ b/third_party/blink/renderer/core/loader/navigation_policy.cc
+@@ -52,6 +52,9 @@ NavigationPolicy NavigationPolicyFromEventModifiers(int16_t button,
+                                                     bool shift,
+                                                     bool alt,
+                                                     bool meta) {
++#if 1
++  return kNavigationPolicyCurrentTab;
++#else
+ #if BUILDFLAG(IS_MAC)
+   const bool new_tab_modifier = (button == 1) || meta;
+ #else
+@@ -65,6 +68,7 @@ NavigationPolicy NavigationPolicyFromEventModifiers(int16_t button,
+                  : kNavigationPolicyNewBackgroundTab;
+   }
+   return shift ? kNavigationPolicyNewWindow : kNavigationPolicyDownload;
++#endif
+ }
+ 
+ NavigationPolicy NavigationPolicyFromEventInternal(const Event* event) {
+-- 
+2.34.1
+

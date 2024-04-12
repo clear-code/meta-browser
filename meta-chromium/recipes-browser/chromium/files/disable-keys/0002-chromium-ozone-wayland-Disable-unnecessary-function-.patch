@@ -1,0 +1,28 @@
+From 11c790e5bb924628bb5eceb57456f545a5ffa331 Mon Sep 17 00:00:00 2001
+From: Hara Tomoyuki <tomoyuki.hara@miraclelinux.biz>
+Date: Tue, 8 Nov 2022 13:26:29 +0900
+Subject: [PATCH 02/10] chromium-ozone-wayland: Disable unnecessary function
+ key.(FCNCHMI-186)
+
+---
+ chrome/browser/ui/views/accelerator_table.cc | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/chrome/browser/ui/views/accelerator_table.cc b/chrome/browser/ui/views/accelerator_table.cc
+index 1c3a19eb04281..624cf1484f216 100644
+--- a/chrome/browser/ui/views/accelerator_table.cc
++++ b/chrome/browser/ui/views/accelerator_table.cc
+@@ -130,8 +130,8 @@ const AcceleratorMapping kAcceleratorMap[] = {
+     {ui::VKEY_F5, ui::EF_CONTROL_DOWN, IDC_RELOAD_BYPASSING_CACHE},
+     {ui::VKEY_F5, ui::EF_SHIFT_DOWN, IDC_RELOAD_BYPASSING_CACHE},
+     // {ui::VKEY_F6, ui::EF_NONE, IDC_FOCUS_NEXT_PANE},
+-    {ui::VKEY_F6, ui::EF_SHIFT_DOWN, IDC_FOCUS_PREVIOUS_PANE},
+-    {ui::VKEY_F6, ui::EF_CONTROL_DOWN, IDC_FOCUS_WEB_CONTENTS_PANE},
++    // {ui::VKEY_F6, ui::EF_SHIFT_DOWN, IDC_FOCUS_PREVIOUS_PANE},
++    // {ui::VKEY_F6, ui::EF_CONTROL_DOWN, IDC_FOCUS_WEB_CONTENTS_PANE},
+     // {ui::VKEY_F10, ui::EF_NONE, IDC_FOCUS_MENU_BAR},
+     // {ui::VKEY_F11, ui::EF_NONE, IDC_FULLSCREEN},
+     // {ui::VKEY_M, ui::EF_SHIFT_DOWN | ui::EF_PLATFORM_ACCELERATOR,
+-- 
+2.34.1
+

@@ -1,0 +1,120 @@
+From f8829fa74d7d4a25d8c1e7c569a34031584db9dd Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Fri, 13 May 2022 17:37:56 +0900
+Subject: [PATCH 10/10] Disable selection on long tap, double tap and triple
+ tap
+
+Signed-off-by: Takuro Ashie <ashie@clear-code.com>
+---
+ .../renderer/core/editing/selection_controller.cc     | 11 +++++++++++
+ .../blink/renderer/core/input/gesture_manager.cc      |  4 ++++
+ ui/views/controls/textfield/textfield.cc              |  4 ++++
+ 3 files changed, 19 insertions(+)
+
+diff --git a/third_party/blink/renderer/core/editing/selection_controller.cc b/third_party/blink/renderer/core/editing/selection_controller.cc
+index ea0cb1c91dcd9..fc77c5bb3b4ba 100644
+--- a/third_party/blink/renderer/core/editing/selection_controller.cc
++++ b/third_party/blink/renderer/core/editing/selection_controller.cc
+@@ -604,6 +604,9 @@ bool SelectionController::SelectClosestWordFromHitTestResult(
+     const HitTestResult& result,
+     AppendTrailingWhitespace append_trailing_whitespace,
+     SelectInputEventType select_input_event_type) {
++  if (select_input_event_type == SelectInputEventType::kTouch)
++    return false;
++
+   Node* const inner_node = result.InnerPossiblyPseudoNode();
+ 
+   if (!inner_node || !inner_node->GetLayoutObject() ||
+@@ -736,6 +739,9 @@ template <typename MouseEventObject>
+ bool SelectionController::SelectClosestWordFromMouseEvent(
+     const MouseEventObject* mouse_event,
+     const HitTestResult& result) {
++  if (mouse_event->FromTouch())
++    return false;
++
+   if (!mouse_down_may_start_select_)
+     return false;
+ 
+@@ -943,6 +949,9 @@ bool SelectionController::HandleTripleClick(
+   TRACE_EVENT0("blink",
+                "SelectionController::handleMousePressEventTripleClick");
+ 
++  if (event.Event().FromTouch())
++    return false;
++
+   if (!Selection().IsAvailable()) {
+     // editing/shadow/doubleclick-on-meter-in-shadow-crash.html reach here.
+     return false;
+@@ -1157,6 +1166,7 @@ bool SelectionController::HandlePasteGlobalSelection(
+ 
+ bool SelectionController::HandleGestureLongPress(
+     const HitTestResult& hit_test_result) {
++#if 0
+   TRACE_EVENT0("blink", "SelectionController::handleGestureLongPress");
+ 
+   if (!Selection().IsAvailable())
+@@ -1180,6 +1190,7 @@ bool SelectionController::HandleGestureLongPress(
+   if (!inner_node->isConnected() || !inner_node->GetLayoutObject())
+     return false;
+   SetCaretAtHitTestResult(hit_test_result);
++#endif
+   return false;
+ }
+ 
+diff --git a/third_party/blink/renderer/core/input/gesture_manager.cc b/third_party/blink/renderer/core/input/gesture_manager.cc
+index 3a0b074726e3c..111bf2f751a20 100644
+--- a/third_party/blink/renderer/core/input/gesture_manager.cc
++++ b/third_party/blink/renderer/core/input/gesture_manager.cc
+@@ -396,6 +396,7 @@ WebInputEventResult GestureManager::HandleGestureShortPress(
+ 
+ WebInputEventResult GestureManager::HandleGestureLongPress(
+     const GestureEventWithHitTestResults& targeted_event) {
++#if 0
+   const WebGestureEvent& gesture_event = targeted_event.Event();
+ 
+   // FIXME: Ideally we should try to remove the extra mouse-specific hit-tests
+@@ -448,6 +449,9 @@ WebInputEventResult GestureManager::HandleGestureLongPress(
+       inner_node ? inner_node->GetDocument().GetFrame() : nullptr,
+       mojom::blink::UserActivationNotificationType::kInteraction);
+   return SendContextMenuEventForGesture(targeted_event);
++#else
++  return WebInputEventResult::kNotHandled;
++#endif
+ }
+ 
+ WebInputEventResult GestureManager::HandleGestureLongTap(
+diff --git a/ui/views/controls/textfield/textfield.cc b/ui/views/controls/textfield/textfield.cc
+index a0a5dd7f46987..ca6feb6770249 100644
+--- a/ui/views/controls/textfield/textfield.cc
++++ b/ui/views/controls/textfield/textfield.cc
+@@ -756,9 +756,11 @@ void Textfield::OnGestureEvent(ui::GestureEvent* event) {
+           OnAfterUserAction();
+         }
+       } else if (event->details().tap_count() == 2) {
++#if 0
+         OnBeforeUserAction();
+         SelectWordAt(event->location());
+         OnAfterUserAction();
++#endif
+       } else {
+         OnBeforeUserAction();
+         SelectAll(false);
+@@ -768,6 +770,7 @@ void Textfield::OnGestureEvent(ui::GestureEvent* event) {
+       event->SetHandled();
+       break;
+     case ui::ET_GESTURE_LONG_PRESS:
++#if 0
+       if (!GetRenderText()->IsPointInSelection(event->location())) {
+         // If long-press happens outside selection, select word and try to
+         // activate touch selection.
+@@ -787,6 +790,7 @@ void Textfield::OnGestureEvent(ui::GestureEvent* event) {
+         DestroyTouchSelection();
+         initiating_drag_ = switches::IsTouchDragDropEnabled();
+       }
++#endif
+       break;
+     case ui::ET_GESTURE_LONG_TAP:
+       // If touch selection is enabled, the context menu on long tap will be
+-- 
+2.34.1
+

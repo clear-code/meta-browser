@@ -1,0 +1,41 @@
+From bfc7d8ab325cff6c05df9e4a8bce534b20f67d71 Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Tue, 23 Jan 2024 17:11:20 +0900
+Subject: [PATCH 07/10] Disable Enter + modifier keys on Omnibox
+
+* Shift + Enter
+* Alt + Enter or Shift + Command + Shift + Enter
+* Alt + Shift + Enter or Command + Enter
+---
+ chrome/browser/ui/views/omnibox/omnibox_view_views.cc | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/chrome/browser/ui/views/omnibox/omnibox_view_views.cc b/chrome/browser/ui/views/omnibox/omnibox_view_views.cc
+index dbdac4ec90827..994fba08ef1b5 100644
+--- a/chrome/browser/ui/views/omnibox/omnibox_view_views.cc
++++ b/chrome/browser/ui/views/omnibox/omnibox_view_views.cc
+@@ -1573,10 +1573,13 @@ bool OmniboxViewViews::HandleKeyEvent(views::Textfield* textfield,
+   const bool shift = event.IsShiftDown();
+   const bool control = event.IsControlDown();
+   const bool alt = event.IsAltDown() || event.IsAltGrDown();
++#if 0
+   const bool command = event.IsCommandDown();
++#endif
+   switch (event.key_code()) {
+     case ui::VKEY_RETURN: {
+       WindowOpenDisposition disposition = WindowOpenDisposition::CURRENT_TAB;
++#if 0
+       if ((alt && !shift) || (shift && command)) {
+         disposition = WindowOpenDisposition::NEW_FOREGROUND_TAB;
+       } else if (alt || command) {
+@@ -1584,6 +1587,7 @@ bool OmniboxViewViews::HandleKeyEvent(views::Textfield* textfield,
+       } else if (shift) {
+         disposition = WindowOpenDisposition::NEW_WINDOW;
+       }
++#endif
+       if (model()->PopupIsOpen() &&
+           model()->TriggerPopupSelectionAction(
+               model()->GetPopupSelection(), event.time_stamp(), disposition)) {
+-- 
+2.34.1
+

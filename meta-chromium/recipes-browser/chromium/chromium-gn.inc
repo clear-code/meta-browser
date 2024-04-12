@@ -25,6 +25,16 @@ SRC_URI += " \
     file://0014-IWYU-add-memory-for-std-unique_ptr-in-disk_cache-Bit.patch \
     file://0001-Enable-to-build-against-missing-DRM_FORMAT_P010-linu.patch \
     file://0002-Remove-needless-dependency-to-importlib_metadata-of-.patch \
+    file://disable-keys/0001-chromium-ozone-wayland-Disable-unnecessary-shortcut-.patch \
+    file://disable-keys/0002-chromium-ozone-wayland-Disable-unnecessary-function-.patch \
+    file://disable-keys/0003-chromium-ozone-wayland-Disable-unnecessary-shortcut-.patch \
+    file://disable-keys/0004-Disable-added-accelerator-keys-between-v91-to-v106.patch \
+    file://disable-keys/0005-Disable-remaining-accelerator-keys.patch \
+    file://disable-keys/0006-Disable-clicking-links-with-key-modifiers.patch \
+    file://disable-keys/0007-Disable-Enter-modifier-keys-on-Omnibox.patch \
+    file://disable-keys/0008-Disable-tab-focus-chain-for-HTML-elements.patch \
+    file://disable-keys/0009-Disable-context-menu.patch \
+    file://disable-keys/0010-Disable-selection-on-long-tap-double-tap-and-triple-.patch \
 "
 
 SRC_URI_append_libc-musl = "\
