@@ -35,6 +35,7 @@ SRC_URI += " \
     file://disable-keys/0008-Disable-tab-focus-chain-for-HTML-elements.patch \
     file://disable-keys/0009-Disable-context-menu.patch \
     file://disable-keys/0010-Disable-selection-on-long-tap-double-tap-and-triple-.patch \
+    file://0001-ozone-wayland-Don-t-call-eglSwapBuffers-when-window-.patch \
 "
 
 SRC_URI_append_libc-musl = "\
