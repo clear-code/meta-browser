@@ -32,6 +32,7 @@ SRC_URI += "\
     file://0015-Revert-Remove-third_party-libavif.patch \
     file://0016-Disable-crabbyavif-to-fix-build-errors.patch \
     file://0017-rust-Use-adler-instead-of-adler2.patch \
+    file://0018-Don-t-add-mbranch-protection-for-non-ARM-arch.patch \
 "
 
 # Missing third_party sources.
