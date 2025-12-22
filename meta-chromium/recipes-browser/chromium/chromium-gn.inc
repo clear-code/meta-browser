@@ -112,7 +112,7 @@ BUILD_CC:toolchain-clang = "clang"
 BUILD_CXX:toolchain-clang = "clang++"
 BUILD_LD:toolchain-clang = "clang"
 
-PACKAGECONFIG ??= "upower use-egl"
+PACKAGECONFIG ??= "upower use-egl custom-libcxx"
 
 # this makes sure the dependencies for the EGL mode are present; otherwise, the configure scripts
 # automatically and silently fall back to GLX
@@ -127,7 +127,7 @@ PACKAGECONFIG[component-build] = ""
 # Starting with M61, Chromium defaults to building with its own copy of libc++
 # instead of the system's libstdc++. Add a knob to control this behavior
 # https://groups.google.com/a/chromium.org/d/msg/chromium-packagers/8aYO3me2SCE/SZ8pJXhZAwAJ
-PACKAGECONFIG[custom-libcxx] = "use_custom_libcxx=true,use_custom_libcxx=false,,"
+PACKAGECONFIG[custom-libcxx] = "use_custom_libcxx=true use_custom_libcxx_for_host=true,use_custom_libcxx=false use_custom_libcxx_for_host=false,,"
 
 PACKAGECONFIG[cups] = "use_cups=true,use_cups=false,cups"
 PACKAGECONFIG[gtk4] = ""

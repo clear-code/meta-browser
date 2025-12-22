@@ -3,8 +3,8 @@ HOMEPAGE = "https://www.chromium.org/Home"
 
 CVE_PRODUCT = "chromium:chromium google:chrome"
 
-SRC_URI = "https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${PV}.tar.xz"
-SRC_URI[sha256sum] = "f98315eacbf3be106feca37f8243d8c4092d4fd832c918aa36dc229eb6ab39e0"
+SRC_URI = "https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${PV}-lite.tar.xz"
+SRC_URI[sha256sum] = "4e2f87bd5d5e630ac4fff310ed2216e3bed3164fb79d11b83526a522eef70db0"
 
 S = "${WORKDIR}/chromium-${PV}"
 
@@ -85,7 +85,6 @@ LIC_FILES_CHKSUM = "\
     file://${S}/ios/third_party/motion_animator_objc/LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57 \
     file://${S}/ios/third_party/motion_interchange_objc/LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57 \
     file://${S}/ios/third_party/motion_transitioning_objc/LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57 \
-    file://${S}/native_client_sdk/src/libraries/third_party/newlib-extras/README;md5=e944d73ca3817b7ca8656eafb9497fed \
     file://${S}/net/third_party/mozilla_win/LICENSE;md5=9b13a17f35cae227ee726ee0108d72a2 \
     file://${S}/net/third_party/nss/LICENSE;md5=3b1e88e1b9c0b5a4b2881d46cce06a18 \
     file://${S}/net/third_party/quiche/src/LICENSE;md5=0fca02217a5d49a14dfe2d11837bb34d \
