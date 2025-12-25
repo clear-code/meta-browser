@@ -160,13 +160,7 @@ GN_ARGS = " \
 # Not enabled by default, because the freetype version from oe-core
 # often isn't compatible, e.g. freetype-2.11 isn't compatible with
 # chromium-94
-#GN_ARGS += "use_system_freetype=false"
-# Confirmed that it's avaible with v132 + scarthgap.
-# And it's needed to use chromium-lite tarball.
-GN_ARGS += "use_system_freetype=true"
-DEPENDS += " freetype"
-
-#GN_ARGS += "use_system_icu=true icu_use_data_file=false icu_use_data_file_for_host=false"
+GN_ARGS += "use_system_freetype=false"
 
 # Qt support appears to be underdevelopment in Nov 2022 so disable now
 # but a PACKAGECONFIG option should be added when the feature is ready.
