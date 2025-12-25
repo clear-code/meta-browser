@@ -5,6 +5,7 @@ CVE_PRODUCT = "chromium:chromium google:chrome"
 
 SRC_URI = "https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${PV}-lite.tar.xz"
 SRC_URI[sha256sum] = "4e2f87bd5d5e630ac4fff310ed2216e3bed3164fb79d11b83526a522eef70db0"
+SRC_URI += "file://chromium-${PV}-lite-missing.tar.xz"
 
 S = "${WORKDIR}/chromium-${PV}"
 
