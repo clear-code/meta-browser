@@ -34,18 +34,10 @@ SRC_URI += "\
     ${@ '' if rust_is_newer_than_190(d) else 'file://chromium-142-crabbyavif-rust18x.patch'} \
     file://fix-SYS_SECCOMP-redefinition.patch \
     file://use-adler2.patch \
-    file://chromium-145-zip_ffi_glue-use-edition2024.patch \
-    file://0014-devtools-fix-import-meta-main-for-older-nodejs.patch \
-    file://fix-cpp26-octal-literals.patch \
-    file://fix-clang20-defaulted-operator-crash.patch \
-    file://fix-xr-rigid-transform-incomplete-type.patch \
 "
 
 # ARM/AArch64-specific patches.
-SRC_URI:append:aarch64 = "\
-    file://fix-mksnapshot-clang20-miscompile.patch \
-    ${@bb.utils.contains('TUNE_FEATURES', 'crypto', '', ' file://arm/0001-Fix-AES-crypto-SIGILL-on-rpi4-64.patch', d)} \
-"
+SRC_URI:append:aarch64 = "${@bb.utils.contains('TUNE_FEATURES', 'crypto', '', ' file://arm/0001-Fix-AES-crypto-SIGILL-on-rpi4-64.patch', d)}"
 
 # musl-specific patches.
 SRC_URI:append:libc-musl = "\
