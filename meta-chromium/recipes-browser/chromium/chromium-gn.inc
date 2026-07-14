@@ -34,6 +34,9 @@ SRC_URI += "\
     ${@ '' if rust_is_newer_than_190(d) else 'file://chromium-142-crabbyavif-rust18x.patch'} \
     file://fix-SYS_SECCOMP-redefinition.patch \
     file://use-adler2.patch \
+    file://Backport-151-Only-pass-sysroot-if-use_sysroot.patch \
+    file://Backport-151-build-Omit-ar-from-inputs-when-resolved-via-PATH.patch \
+    file://Backport-151-build-Fix-get_path_info-on-empty-ar-in-unbundle-tool.patch \
 "
 
 # ARM/AArch64-specific patches.
@@ -80,6 +83,7 @@ DEPENDS += " \
     libwebp \
     libxkbcommon \
     libxslt \
+    lld-native \
     ninja-native \
     nodejs-native \
     nspr \
