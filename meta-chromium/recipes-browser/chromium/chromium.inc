@@ -3,8 +3,9 @@ HOMEPAGE = "https://www.chromium.org/Home"
 
 CVE_PRODUCT = "chromium:chromium google:chrome"
 
-SRC_URI = "https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${PV}.tar.xz"
-SRC_URI[sha256sum] = "835dfd3228f6adb2a8c78e296c7d4981aee35daee401a2fe1493b4657d736d25"
+SRC_URI = "https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${PV}-lite.tar.xz"
+SRC_URI[sha256sum] = "21867c081656dacf2958c6179a54e3462a5ea2eb0a0b2c3443e13c0b99aca5e4"
+SRC_URI += "file://chromium-${PV}-lite-missing.tar.xz"
 S = "${WORKDIR}/chromium-${PV}"
 
 # GCC is not tested or officially supported upstream, and supporting it here
@@ -84,7 +85,6 @@ LIC_FILES_CHKSUM = "\
     file://${S}/ios/third_party/motion_animator_objc/LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57 \
     file://${S}/ios/third_party/motion_interchange_objc/LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57 \
     file://${S}/ios/third_party/motion_transitioning_objc/LICENSE;md5=3b83ef96387f14655fc854ddc3c6bd57 \
-    file://${S}/native_client_sdk/src/libraries/third_party/newlib-extras/README;md5=e944d73ca3817b7ca8656eafb9497fed \
     file://${S}/net/third_party/mozilla_security_manager/LICENSE;md5=f19cdef64a433efe7fd2ddbfc3a19313 \
     file://${S}/net/third_party/mozilla_win/LICENSE;md5=9b13a17f35cae227ee726ee0108d72a2 \
     file://${S}/net/third_party/nss/LICENSE;md5=3b1e88e1b9c0b5a4b2881d46cce06a18 \
