@@ -83,7 +83,6 @@ DEPENDS += " \
     libwebp \
     libxkbcommon \
     libxslt \
-    lld-native \
     ninja-native \
     nodejs-native \
     nspr \
