@@ -1,0 +1,29 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Chromium meta-browser maintainers <meta-browser@lists.openembedded.org>
+Date: Tue, 1 Sep 2026 15:30:00 +0900
+Subject: [PATCH] v8: Add Chromium compiler-rt headers for Clang builds
+
+The Yocto toolchain uses a system Clang, while V8 enables its sanitizer
+interfaces when sanitizer hardening flags are present. Unlike Chromium's
+bundled Clang, the system compiler does not implicitly expose Chromium's
+compiler-rt headers, which makes sanitizer/common_interface_defs.h
+unavailable when compiling V8.
+
+Expose the in-tree compiler-rt include directory through V8's internal
+configuration for Clang builds.
+
+Upstream-Status: Inappropriate [OE-specific]
+---
+ v8/BUILD.gn | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/v8/BUILD.gn b/v8/BUILD.gn
+--- a/v8/BUILD.gn
++++ b/v8/BUILD.gn
+@@ -901,2 +901,6 @@
+   ]
++  if (is_clang) {
++    include_dirs += [ "//third_party/compiler-rt/src/include" ]
++  }
++
+ }
