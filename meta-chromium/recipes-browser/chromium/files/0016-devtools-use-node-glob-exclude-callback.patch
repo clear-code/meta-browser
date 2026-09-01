@@ -1,0 +1,49 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Chromium meta-browser maintainers <meta-browser@lists.openembedded.org>
+Date: Tue, 1 Sep 2026 13:00:00 +0900
+Subject: [PATCH] devtools: Use a callback for Node fs glob exclusions
+
+The Node.js version bundled by Chromium exposes fs.globSync() with a
+function-valued exclude option. Convert the existing glob patterns to an
+equivalent callback so the DevTools string collection works with the
+scarthgap toolchain's Node binary.
+
+Upstream-Status: Inappropriate [OE-specific]
+---
+ .../src/front_end/core/i18n/collect-ui-strings.js       | 8 +++++++-
+ .../src/third_party/i18n/collect-strings.js              | 8 +++++++-
+ 2 files changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/third_party/devtools-frontend/src/third_party/i18n/collect-strings.js b/third_party/devtools-frontend/src/third_party/i18n/collect-strings.js
+--- a/third_party/devtools-frontend/src/third_party/i18n/collect-strings.js
++++ b/third_party/devtools-frontend/src/third_party/i18n/collect-strings.js
+@@ -650,5 +650,10 @@ export function collectAllStringsInDir(directory) {
+   const files = fs.globSync('**/*.{js,ts}', {
+     cwd: directory,
+-    exclude: IGNORED_PATH_COMPONENTS,
++    exclude: entry => {
++      const components = entry.replaceAll('\\', '/').split('/');
++      return components.includes('.git') || components.includes('third_party') ||
++          components.some(component => component.endsWith('_test_runner')) ||
++          entry.endsWith('.test.ts');
++    },
+   });
+   for (const pathRelativeToDirectory of files) {
+diff --git a/third_party/devtools-frontend/src/front_end/core/i18n/collect-ui-strings.js b/third_party/devtools-frontend/src/front_end/core/i18n/collect-ui-strings.js
+--- a/third_party/devtools-frontend/src/front_end/core/i18n/collect-ui-strings.js
++++ b/third_party/devtools-frontend/src/front_end/core/i18n/collect-ui-strings.js
+@@ -71,6 +71,11 @@ for (const directory of inputDirectories) {
+   const fs = globSync('**/*.{js,ts,gn}', {
+     cwd: directory,
+-    exclude: IGNORED_PATH_COMPONENTS,
++    exclude: entry => {
++      const components = entry.replaceAll('\\', '/').split('/');
++      return components.includes('.git') || components.includes('third_party') ||
++          components.some(component => component.endsWith('_test_runner')) ||
++          entry.endsWith('.test.ts');
++    },
+   });
+   files.push(...fs.map(f => path.join(directory, f)));
+ }
+-- 
+2.54.0
