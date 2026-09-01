@@ -36,6 +36,7 @@ SRC_URI += "\
     file://0018-devtools-support-node-without-import-meta-main.patch \
     file://0019-devtools-fix-more-import-meta-main-users.patch \
     file://0020-v8-add-compiler-rt-include-dir.patch \
+    file://0021-fix-cpp-octal-literal.patch \
     file://0001-Fix-building-gpu_host_impl.cc-on-Linux.patch \
     ${@ '' if rust_is_newer_than_190(d) else 'file://chromium-142-crabbyavif-rust18x.patch'} \
     file://fix-SYS_SECCOMP-redefinition.patch \

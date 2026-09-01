@@ -1,0 +1,19 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Chromium meta-browser maintainers <meta-browser@lists.openembedded.org>
+Date: Wed, 2 Sep 2026 10:00:00 +0900
+Subject: [PATCH] named_mojo_ipc_server: use C++ octal literal syntax
+
+Chromium v150 contains a Python-style octal literal in a C++ source file.
+Use the C++ syntax accepted by the Yocto Clang toolchain.
+
+Upstream-Status: Inappropriate [OE-specific]
+---
+ components/named_mojo_ipc_server/named_mojo_server_endpoint_connector_linux.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/components/named_mojo_ipc_server/named_mojo_server_endpoint_connector_linux.cc b/components/named_mojo_ipc_server/named_mojo_server_endpoint_connector_linux.cc
+--- a/components/named_mojo_ipc_server/named_mojo_server_endpoint_connector_linux.cc
++++ b/components/named_mojo_ipc_server/named_mojo_server_endpoint_connector_linux.cc
+@@ -121,1 +121,1 @@
+-    if (chmod(options_.server_name.c_str(), 0o666) != 0) {
++    if (chmod(options_.server_name.c_str(), 0666) != 0) {
