@@ -1,0 +1,26 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Chromium meta-browser maintainers <meta-browser@lists.openembedded.org>
+Date: Tue, 1 Sep 2026 14:30:00 +0900
+Subject: [PATCH] devtools: Support Node versions without import.meta.main
+
+build_ai_skills.mjs is executed during the Chromium build. Node 22.11.0
+does not provide import.meta.main, so the script otherwise exits successfully
+without generating its output.
+
+Upstream-Status: Inappropriate [OE-specific]
+---
+ .../src/scripts/build/build_ai_skills.mjs | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/third_party/devtools-frontend/src/scripts/build/build_ai_skills.mjs b/third_party/devtools-frontend/src/scripts/build/build_ai_skills.mjs
+--- a/third_party/devtools-frontend/src/scripts/build/build_ai_skills.mjs
++++ b/third_party/devtools-frontend/src/scripts/build/build_ai_skills.mjs
+@@ -7,0 +8,1 @@
++import {fileURLToPath} from 'node:url';
+@@ -63,1 +64,1 @@ function runMain() {
+-if (import.meta.main) {
++if (process.argv[1] === fileURLToPath(import.meta.url)) {
+   runMain();
+ }
+-- 
+2.54.0
