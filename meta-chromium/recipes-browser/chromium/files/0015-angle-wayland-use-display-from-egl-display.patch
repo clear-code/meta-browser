@@ -1,0 +1,54 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Chromium meta-browser maintainers <meta-browser@lists.openembedded.org>
+Date: Tue, 1 Sep 2026 12:30:00 +0900
+Subject: [PATCH] angle: Use the EGL display for Vulkan Wayland surfaces
+
+The Wayland headers available in scarthgap do not provide
+wl_proxy_get_display(). Pass the display already owned by DisplayVkWayland
+to the window surface instead.
+
+Upstream-Status: Inappropriate [OE-specific]
+---
+ .../vulkan/linux/wayland/DisplayVkWayland.cpp       |  2 +-
+ .../vulkan/linux/wayland/WindowSurfaceVkWayland.cpp | 10 +++++-----
+ .../vulkan/linux/wayland/WindowSurfaceVkWayland.h   |  6 +++---
+ 3 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/third_party/angle/src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.cpp b/third_party/angle/src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.cpp
+--- a/third_party/angle/src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.cpp
++++ b/third_party/angle/src/libANGLE/renderer/vulkan/linux/wayland/DisplayVkWayland.cpp
+@@ -87,1 +87,1 @@
+-    return new WindowSurfaceVkWayland(state, window);
++    return new WindowSurfaceVkWayland(state, window, mWaylandDisplay);
+diff --git a/third_party/angle/src/libANGLE/renderer/vulkan/linux/wayland/WindowSurfaceVkWayland.h b/third_party/angle/src/libANGLE/renderer/vulkan/linux/wayland/WindowSurfaceVkWayland.h
+--- a/third_party/angle/src/libANGLE/renderer/vulkan/linux/wayland/WindowSurfaceVkWayland.h
++++ b/third_party/angle/src/libANGLE/renderer/vulkan/linux/wayland/WindowSurfaceVkWayland.h
+@@ -14,1 +14,2 @@
++struct wl_display;
+ struct wl_egl_window;
+@@ -30,1 +30,2 @@
+-    WindowSurfaceVkWayland(const egl::SurfaceState &surfaceState, EGLNativeWindowType window);
++    WindowSurfaceVkWayland(const egl::SurfaceState &surfaceState, EGLNativeWindowType window,
++                           wl_display *display);
+@@ -37,0 +38,1 @@
++    wl_display *mDisplay;
+diff --git a/third_party/angle/src/libANGLE/renderer/vulkan/linux/wayland/WindowSurfaceVkWayland.cpp b/third_party/angle/src/libANGLE/renderer/vulkan/linux/wayland/WindowSurfaceVkWayland.cpp
+--- a/third_party/angle/src/libANGLE/renderer/vulkan/linux/wayland/WindowSurfaceVkWayland.cpp
++++ b/third_party/angle/src/libANGLE/renderer/vulkan/linux/wayland/WindowSurfaceVkWayland.cpp
+@@ -28,2 +28,3 @@
+-                                               EGLNativeWindowType window)
+-    : WindowSurfaceVk(surfaceState, window)
++                                               EGLNativeWindowType window,
++                                               wl_display *display)
++    : WindowSurfaceVk(surfaceState, window), mDisplay(display)
+@@ -48,2 +48,0 @@
+-    wl_display *surfaceDisplay = static_cast<wl_display *>(
+-        wl_proxy_get_display(reinterpret_cast<wl_proxy *>(eglWindow->surface)));
+@@ -54,1 +52,1 @@
+-                       context->getRenderer()->getQueueFamilyIndex(), surfaceDisplay),
++                       context->getRenderer()->getQueueFamilyIndex(), mDisplay),
+@@ -61,1 +59,1 @@
+-    createInfo.display = surfaceDisplay;
++    createInfo.display = mDisplay;
+-- 
+2.54.0
