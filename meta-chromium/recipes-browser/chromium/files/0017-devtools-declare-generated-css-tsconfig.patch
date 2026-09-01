@@ -1,0 +1,29 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Chromium meta-browser maintainers <meta-browser@lists.openembedded.org>
+Date: Tue, 1 Sep 2026 13:30:00 +0900
+Subject: [PATCH] devtools: Declare generated CSS tsconfig output
+
+generate_css_js_files.js writes a <target>-tsconfig.json in addition to the
+generated JavaScript files, but generate_css.gni did not declare that file as
+a Ninja output. This leaves the TypeScript dependency missing after an
+incremental or resumed build.
+
+Upstream-Status: Inappropriate [OE-specific]
+---
+ .../src/scripts/build/ninja/generate_css.gni | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/third_party/devtools-frontend/src/scripts/build/ninja/generate_css.gni b/third_party/devtools-frontend/src/scripts/build/ninja/generate_css.gni
+--- a/third_party/devtools-frontend/src/scripts/build/ninja/generate_css.gni
++++ b/third_party/devtools-frontend/src/scripts/build/ninja/generate_css.gni
+@@ -32,1 +32,2 @@
+-    outputs = []
++    outputs = [ "$target_gen_dir/$target_name-tsconfig.json" ]
++    _grd_outputs = []
+@@ -34,0 +35,1 @@
++      _grd_outputs += [ "$target_gen_dir/$_input.js" ]
+@@ -41,1 +43,1 @@
+-        grd_files = outputs
++        grd_files = _grd_outputs
+-- 
+2.54.0
