@@ -19,8 +19,6 @@ diff --git a/third_party/devtools-frontend/src/scripts/build/generate_css_js_fil
  import * as path from 'node:path';
 +import {fileURLToPath} from 'node:url';
  import postcss from 'postcss';
-+import {fileURLToPath} from 'node:url';
- import postcss from 'postcss';
 @@ -80,1 +81,1 @@ async function runMain() {
 -if (import.meta.main) {
 +if (process.argv[1] === fileURLToPath(import.meta.url)) {
