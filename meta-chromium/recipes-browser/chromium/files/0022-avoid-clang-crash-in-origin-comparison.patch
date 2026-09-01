@@ -1,0 +1,26 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Chromium meta-browser maintainers <meta-browser@lists.openembedded.org>
+Date: Wed, 2 Sep 2026 11:00:00 +0900
+Subject: [PATCH] network: avoid Clang crash in defaulted origin comparison
+
+Clang 20 crashes while parsing the defaulted equality operator for
+OriginWithPossibleWildcards when its mojom CSPSource member provides a
+templated operator==. Implement the equality comparison explicitly; this
+preserves the generated comparison semantics and avoids triggering the
+frontend crash.
+
+Upstream-Status: Inappropriate [OE-specific]
+---
+ services/network/public/cpp/permissions_policy/origin_with_possible_wildcards.cc | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/services/network/public/cpp/permissions_policy/origin_with_possible_wildcards.cc b/services/network/public/cpp/permissions_policy/origin_with_possible_wildcards.cc
+--- a/services/network/public/cpp/permissions_policy/origin_with_possible_wildcards.cc
++++ b/services/network/public/cpp/permissions_policy/origin_with_possible_wildcards.cc
+@@ -96,3 +96,5 @@
+-bool operator==(const OriginWithPossibleWildcards& lhs,
+-                const OriginWithPossibleWildcards& rhs) = default;
++bool operator==(const OriginWithPossibleWildcards& lhs,
++                const OriginWithPossibleWildcards& rhs) {
++  return lhs.csp_source == rhs.csp_source;
++}
