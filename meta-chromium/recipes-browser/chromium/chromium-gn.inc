@@ -33,6 +33,7 @@ SRC_URI += "\
     file://0015-angle-wayland-use-display-from-egl-display.patch \
     file://0016-devtools-use-node-glob-exclude-callback.patch \
     file://0017-devtools-declare-generated-css-tsconfig.patch \
+    file://0018-devtools-support-node-without-import-meta-main.patch \
     file://0001-Fix-building-gpu_host_impl.cc-on-Linux.patch \
     ${@ '' if rust_is_newer_than_190(d) else 'file://chromium-142-crabbyavif-rust18x.patch'} \
     file://fix-SYS_SECCOMP-redefinition.patch \

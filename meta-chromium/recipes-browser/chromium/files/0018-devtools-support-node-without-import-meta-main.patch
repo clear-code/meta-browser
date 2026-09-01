@@ -1,0 +1,30 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Chromium meta-browser maintainers <meta-browser@lists.openembedded.org>
+Date: Tue, 1 Sep 2026 14:00:00 +0900
+Subject: [PATCH] devtools: Support Node versions without import.meta.main
+
+Node 22.11.0, which is bundled by this Chromium revision, does not provide
+import.meta.main. Use the portable entrypoint check so the CSS generator is
+actually executed instead of exiting successfully without producing output.
+
+Upstream-Status: Inappropriate [OE-specific]
+---
+ .../src/scripts/build/generate_css_js_files.js | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/third_party/devtools-frontend/src/scripts/build/generate_css_js_files.js b/third_party/devtools-frontend/src/scripts/build/generate_css_js_files.js
+--- a/third_party/devtools-frontend/src/scripts/build/generate_css_js_files.js
++++ b/third_party/devtools-frontend/src/scripts/build/generate_css_js_files.js
+@@ -7,2 +7,3 @@
+ import * as path from 'node:path';
++import {fileURLToPath} from 'node:url';
+ import postcss from 'postcss';
++import {fileURLToPath} from 'node:url';
+ import postcss from 'postcss';
+@@ -80,1 +81,1 @@ async function runMain() {
+-if (import.meta.main) {
++if (process.argv[1] === fileURLToPath(import.meta.url)) {
+   runMain();
+ }
+-- 
+2.54.0
