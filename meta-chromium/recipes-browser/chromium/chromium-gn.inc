@@ -43,9 +43,10 @@ SRC_URI += "\
     file://0001-Fix-building-gpu_host_impl.cc-on-Linux.patch \
     ${@ '' if rust_is_newer_than_190(d) else 'file://chromium-142-crabbyavif-rust18x.patch'} \
     file://fix-SYS_SECCOMP-redefinition.patch \
-    file://0022-Backport-151-Only-pass-sysroot-if-use_sysroot.patch \
-    file://0023-Backport-151-build-Omit-ar-from-inputs-when-resolved-via-PATH.patch \
-    file://0024-Backport-151-build-Fix-get_path_info-on-empty-ar-in-unbundle-tool.patch \
+    file://chromium-145-zip_ffi_glue-use-edition2024.patch \
+    file://disable-sanitizer.patch \
+    file://chromium148-bytemuck-v1-remove-simd-LaneCount-usage.patch \
+    file://0014-add-missing-logging-header.patch \
 "
 
 # ARM/AArch64-specific patches.
