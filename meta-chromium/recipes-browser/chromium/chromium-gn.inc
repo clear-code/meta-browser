@@ -47,6 +47,7 @@ SRC_URI += "\
     file://disable-sanitizer.patch \
     file://chromium148-bytemuck-v1-remove-simd-LaneCount-usage.patch \
     file://0014-add-missing-logging-header.patch \
+    file://Backport-152-don-t-depends-on-histograms.xml-if-it-is-not-git-che.patch \
 "
 
 # ARM/AArch64-specific patches.
