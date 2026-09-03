@@ -41,6 +41,7 @@ SRC_URI += "\
     file://0023-include-base-logging-for-video-sandbox-hook.patch \
     file://0024-fix-incomplete-transform-type-in-xr-rigid-transform.patch \
     file://0025-gate-v8-sanitizer-features-on-runtime-sanitizers.patch \
+    file://0026-v8-disable-ubsan-hardening-without-runtime.patch \
     file://0001-Fix-building-gpu_host_impl.cc-on-Linux.patch \
     ${@ '' if rust_is_newer_than_190(d) else 'file://chromium-142-crabbyavif-rust18x.patch'} \
     file://fix-SYS_SECCOMP-redefinition.patch \

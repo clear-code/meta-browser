@@ -1,0 +1,40 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Chromium meta-browser maintainers <meta-browser@lists.openembedded.org>
+Date: Thu, 3 Sep 2026 12:00:00 +0900
+Subject: [PATCH] v8: disable trap-only UBSan hardening without runtime
+
+The scarthgap system Clang cannot use Chromium's newer
+fsanitize-ignore-for-ubsan-feature option. Without that option, the
+trap-only array-bounds and return configs make V8 report sanitizer features
+as enabled while the sanitizer runtime is not linked. This is especially
+problematic for mksnapshot, which is executed through QEMU during the build.
+
+Keep the configs available for real sanitizer builds, but remove them from
+normal V8 targets when no sanitizer runtime is being used.
+
+Upstream-Status: Inappropriate [OE-specific]
+---
+ v8/gni/v8.gni | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/v8/gni/v8.gni b/v8/gni/v8.gni
+--- a/v8/gni/v8.gni
++++ b/v8/gni/v8.gni
+@@ -395,6 +395,15 @@
+   v8_path_prefix + ":strict_warnings",
+ ]
+ 
++# The system Clang build does not provide the sanitizer runtime used by these
++# trap-only hardening configs. In particular, mksnapshot is executed during
++# the build, so a trap in it aborts snapshot generation under QEMU.
++if (is_clang && !using_sanitizer) {
++  v8_remove_configs += [
++    "//build/config/compiler:sanitize_c_array_bounds",
++    "//build/config/compiler:sanitize_return",
++  ]
++}
+ if (v8_force_optimize_speed) {
+   # Switch to force -O3 optimization regardless of platform or sanitizer
+   # usage.
+-- 
+2.54.0
