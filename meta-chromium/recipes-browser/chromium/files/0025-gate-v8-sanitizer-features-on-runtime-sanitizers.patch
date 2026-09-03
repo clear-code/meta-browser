@@ -1,0 +1,42 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Chromium meta-browser maintainers <meta-browser@lists.openembedded.org>
+Date: Thu, 3 Sep 2026 10:00:00 +0900
+Subject: [PATCH] v8: gate sanitizer features on sanitizer runtime builds
+
+Chromium's release hardening enables trap-only sanitizer checks such as
+array-bounds and return. Clang 20 does not support
+-fsanitize-ignore-for-ubsan-feature, so these flags make __has_feature report
+undefined_behavior_sanitizer in V8 even though no sanitizer runtime is linked.
+That causes V8 to reference __sanitizer_set_death_callback at link time.
+
+Pass the actual Chromium sanitizer-build state to V8 and only enable V8's
+sanitizer-specific code when a sanitizer runtime is in use.
+
+Upstream-Status: Inappropriate [OE-specific]
+---
+ v8/BUILD.gn          | 4 ++++
+ v8/src/base/macros.h | 6 +++---
+ 2 files changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/v8/BUILD.gn b/v8/BUILD.gn
+--- a/v8/BUILD.gn
++++ b/v8/BUILD.gn
+@@ -905,2 +905,5 @@
+ 
++  if (using_sanitizer) {
++    defines = [ "V8_USE_SANITIZER" ]
++  }
+ }
+
+diff --git a/v8/src/base/macros.h b/v8/src/base/macros.h
+--- a/v8/src/base/macros.h
++++ b/v8/src/base/macros.h
+@@ -205,1 +205,1 @@
+-#if defined(__has_feature)
++#if defined(V8_USE_SANITIZER) && defined(__has_feature)
+@@ -219,1 +219,1 @@
+-#if defined(__has_feature)
++#if defined(V8_USE_SANITIZER) && defined(__has_feature)
+@@ -226,1 +226,1 @@
+-#if defined(__has_feature)
++#if defined(V8_USE_SANITIZER) && defined(__has_feature)
