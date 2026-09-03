@@ -1,0 +1,26 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Chromium meta-browser maintainers <meta-browser@lists.openembedded.org>
+Date: Thu, 3 Sep 2026 12:00:00 +0900
+Subject: [PATCH] v8: disable concurrent mksnapshot under QEMU
+
+The arm64 mksnapshot binary is executed through QEMU when Chromium is
+cross-compiled on a different host architecture. Concurrent builtin
+generation currently aborts with SIGTRAP in this configuration. Use the
+serial snapshot path so the build-time generator can complete reliably.
+
+Upstream-Status: Inappropriate [OE-specific]
+---
+ v8/BUILD.gn | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/v8/BUILD.gn b/v8/BUILD.gn
+--- a/v8/BUILD.gn
++++ b/v8/BUILD.gn
+@@ -137,0 +138,5 @@
++
++  # mksnapshot is executed through QEMU for cross-architecture builds.
++  if (is_linux && current_cpu == "arm64" && host_cpu != "arm64") {
++    v8_enable_concurrent_mksnapshot = false
++  }
+-- 
+2.54.0
