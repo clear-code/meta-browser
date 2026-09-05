@@ -598,9 +598,14 @@ do_install() {
 	# A wrapper for the proprietary Google Chrome version already exists.
 	# We can just use that one instead of reinventing the wheel.
 	WRAPPER_FILE=${S}/chrome/installer/linux/common/wrapper
+	# Chromium 150 uses the lowercase @@channel and unclosed @@PROGNAME
+	# placeholders in this template. Keep the older forms for compatibility
+	# with Chromium versions that still use the double-terminated tokens.
 	sed -e "s,@@CHANNEL@@,stable,g" \
-		-e "s,@@PROGNAME@@,chromium-bin,g" \
-		${WRAPPER_FILE} > chromium-wrapper
+	    -e "s,@@channel,stable,g" \
+	    -e "s,@@PROGNAME@@,chromium-bin,g" \
+	    -e "s,@@PROGNAME,chromium-bin,g" \
+	    ${WRAPPER_FILE} > chromium-wrapper
 	install -m 0755 chromium-wrapper ${D}${libdir}/chromium/chromium-wrapper
 	ln -s ${libdir}/chromium/chromium-wrapper ${D}${bindir}/chromium
 
