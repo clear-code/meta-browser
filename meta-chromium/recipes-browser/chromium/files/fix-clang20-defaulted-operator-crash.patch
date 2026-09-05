@@ -1,17 +1,27 @@
+From 01d2252015952da0465f7e415816a0b6e508e31c Mon Sep 17 00:00:00 2001
 From: Copilot <223556219+Copilot@users.noreply.github.com>
-Subject: [PATCH] Fix Clang 20 crash on defaulted out-of-class friend operator==
+Date: Wed, 6 May 2026 16:34:53 +0100
+Subject: [PATCH] Avoid a Clang crash in the defaulted origin comparison
 
-Clang 20 crashes (ICE in SetDeclDefaulted) when an out-of-class friend
-operator== with a DLL-export attribute uses = default. Provide an
-explicit implementation instead. Chromium 147 targets Clang 23 which
-doesn't have this bug.
+Provide the explicit equality comparison already used by scarthgap
+instead of the out-of-class defaulted operator.
 
-Upstream-Status: Inappropriate [scarthgap backport compatibility]
+Refresh the existing scarthgap fix from meta-browser commit 85eeb6b5
+(fix-clang20-defaulted-operator-crash.patch) for Chromium 150.
+The original patch has no Date header; use its enclosing commit date.
+
+Upstream-Status: Inappropriate [scarthgap compiler compatibility]
 Signed-off-by: Caner Altinbasak <cal@brightsign.biz>
+Signed-off-by: Takuro Ashie <ashie@clear-code.com>
+---
+ .../cpp/permissions_policy/origin_with_possible_wildcards.cc  | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
+diff --git a/services/network/public/cpp/permissions_policy/origin_with_possible_wildcards.cc b/services/network/public/cpp/permissions_policy/origin_with_possible_wildcards.cc
+index e14d79aa57..2961cfccf4 100644
 --- a/services/network/public/cpp/permissions_policy/origin_with_possible_wildcards.cc
 +++ b/services/network/public/cpp/permissions_policy/origin_with_possible_wildcards.cc
-@@ -94,7 +94,9 @@
+@@ -94,7 +94,9 @@ bool OriginWithPossibleWildcards::DoesMatchOrigin(
  }
  
  bool operator==(const OriginWithPossibleWildcards& lhs,

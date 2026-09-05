@@ -1,4 +1,4 @@
-From 3e660564c5318079f085596344972f57d680f72a Mon Sep 17 00:00:00 2001
+From bc4d6c4847e27538083cf20685e9ce08a45a8e16 Mon Sep 17 00:00:00 2001
 From: Khem Raj <raj.khem@gmail.com>
 Date: Wed, 13 Feb 2019 09:51:14 -0800
 Subject: [PATCH] debug: Fix build with musl
@@ -13,16 +13,15 @@ clang-8: error: linker command failed with exit code 1 (use -v to see invocation
 
 Upstream-Status: Pending
 Signed-off-by: Khem Raj <raj.khem@gmail.com>
-
 ---
  base/debug/stack_trace.cc | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/base/debug/stack_trace.cc b/base/debug/stack_trace.cc
-index 3debc8bd07..0cc88aa79f 100644
+index a04333b12f..85b2deee09 100644
 --- a/base/debug/stack_trace.cc
 +++ b/base/debug/stack_trace.cc
-@@ -366,7 +366,7 @@
+@@ -369,7 +369,7 @@ std::string StackTrace::ToString() const {
  
  std::string StackTrace::ToStringWithPrefix(cstring_view prefix_string) const {
    std::stringstream stream;
@@ -30,8 +29,8 @@ index 3debc8bd07..0cc88aa79f 100644
 +#if defined(__GLIBC__) && !defined(__UCLIBC__) && !defined(_AIX)
    OutputToStreamWithPrefix(&stream, prefix_string);
  #endif
-   return stream.str();
-@@ -390,7 +390,7 @@
+   return std::move(stream).str();
+@@ -393,7 +393,7 @@ bool StackTrace::ShouldSuppressOutput() {
  }
  
  std::ostream& operator<<(std::ostream& os, const StackTrace& s) {

@@ -26,26 +26,30 @@ SRC_URI += "\
     file://0005-avoid-link-latomic-failure-on-CentOS-8-host.patch \
     file://0007-Fix-constexpr-variable-must-be-initialized-by-a-cons.patch \
     file://0009-Adjust-the-Rust-build-to-our-needs.patch \
-    file://0010-Don-t-require-profiler_builtins.rlib.patch \
     file://0011-fix-check_version-Only-compare-node.js-major-version.patch \
     file://0012-chromium-fix-v4l2-compiler-error-on-arm.patch \
     file://0013-Reduce-minimum-browser-window-width-to-480px.patch \
+    file://0014-Remove-clang-options-unsupported-by-system-clang.patch \
+    file://0015-devtools-use-node-glob-exclude-callback.patch \
+    file://0016-devtools-declare-generated-css-tsconfig.patch \
+    file://0017-devtools-support-node-without-import-meta-main.patch \
+    file://0018-v8-add-compiler-rt-include-dir.patch \
+    file://fix-cpp26-octal-literals.patch \
+    file://fix-clang20-defaulted-operator-crash.patch \
+    file://0019-include-base-logging-for-video-sandbox-hook.patch \
+    file://fix-xr-rigid-transform-incomplete-type.patch \
+    file://0020-gate-v8-sanitizer-features-on-runtime-sanitizers.patch \
+    file://0021-v8-register-allocator-remove-no-regs-directly.patch \
     file://0001-Fix-building-gpu_host_impl.cc-on-Linux.patch \
     ${@ '' if rust_is_newer_than_190(d) else 'file://chromium-142-crabbyavif-rust18x.patch'} \
     file://fix-SYS_SECCOMP-redefinition.patch \
-    file://use-adler2.patch \
-    file://chromium-145-zip_ffi_glue-use-edition2024.patch \
-    file://0014-devtools-fix-import-meta-main-for-older-nodejs.patch \
-    file://fix-cpp26-octal-literals.patch \
-    file://fix-clang20-defaulted-operator-crash.patch \
-    file://fix-xr-rigid-transform-incomplete-type.patch \
+    file://0022-Backport-151-Only-pass-sysroot-if-use_sysroot.patch \
+    file://0023-Backport-151-build-Omit-ar-from-inputs-when-resolved-via-PATH.patch \
+    file://0024-Backport-151-build-Fix-get_path_info-on-empty-ar-in-unbundle-tool.patch \
 "
 
 # ARM/AArch64-specific patches.
-SRC_URI:append:aarch64 = "\
-    file://fix-mksnapshot-clang20-miscompile.patch \
-    ${@bb.utils.contains('TUNE_FEATURES', 'crypto', '', ' file://arm/0001-Fix-AES-crypto-SIGILL-on-rpi4-64.patch', d)} \
-"
+SRC_URI:append:aarch64 = "${@bb.utils.contains('TUNE_FEATURES', 'crypto', '', ' file://arm/0001-Fix-AES-crypto-SIGILL-on-rpi4-64.patch', d)}"
 
 # musl-specific patches.
 SRC_URI:append:libc-musl = "\
@@ -590,9 +594,14 @@ do_install() {
 	# A wrapper for the proprietary Google Chrome version already exists.
 	# We can just use that one instead of reinventing the wheel.
 	WRAPPER_FILE=${S}/chrome/installer/linux/common/wrapper
+	# Chromium 150 uses the lowercase @@channel and unclosed @@PROGNAME
+	# placeholders in this template. Keep the older forms for compatibility
+	# with Chromium versions that still use the double-terminated tokens.
 	sed -e "s,@@CHANNEL@@,stable,g" \
-		-e "s,@@PROGNAME@@,chromium-bin,g" \
-		${WRAPPER_FILE} > chromium-wrapper
+	    -e "s,@@channel,stable,g" \
+	    -e "s,@@PROGNAME@@,chromium-bin,g" \
+	    -e "s,@@PROGNAME,chromium-bin,g" \
+	    ${WRAPPER_FILE} > chromium-wrapper
 	install -m 0755 chromium-wrapper ${D}${libdir}/chromium/chromium-wrapper
 	ln -s ${libdir}/chromium/chromium-wrapper ${D}${bindir}/chromium
 

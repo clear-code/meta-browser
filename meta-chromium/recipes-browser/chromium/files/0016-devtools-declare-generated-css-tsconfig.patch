@@ -1,0 +1,41 @@
+From 666f7da319bb370b4ef33638243a24c671f283a8 Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Tue, 1 Sep 2026 16:32:53 +0900
+Subject: [PATCH] devtools: Declare generated CSS tsconfig output
+
+generate_css_js_files.js writes a <target>-tsconfig.json in addition to the
+generated JavaScript files, but generate_css.gni did not declare that file as
+a Ninja output. This leaves the TypeScript dependency missing after an
+incremental or resumed build.
+
+Upstream-Status: Pending
+Signed-off-by: Takuro Ashie <ashie@clear-code.com>
+---
+ .../src/scripts/build/ninja/generate_css.gni                | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/third_party/devtools-frontend/src/scripts/build/ninja/generate_css.gni b/third_party/devtools-frontend/src/scripts/build/ninja/generate_css.gni
+index 2abb356676..749a601a22 100644
+--- a/third_party/devtools-frontend/src/scripts/build/ninja/generate_css.gni
++++ b/third_party/devtools-frontend/src/scripts/build/ninja/generate_css.gni
+@@ -29,16 +29,18 @@ template("generate_css") {
+       string_join(",", sources),
+     ]
+ 
+-    outputs = []
++    outputs = [ "$target_gen_dir/$target_name-tsconfig.json" ]
++    _grd_outputs = []
+     foreach(_input, sources) {
+       outputs += [ "$target_gen_dir/$_input.js" ]
++      _grd_outputs += [ "$target_gen_dir/$_input.js" ]
+     }
+ 
+     data = outputs
+ 
+     if (!devtools_bundle) {
+       metadata = {
+-        grd_files = outputs
++        grd_files = _grd_outputs
+       }
+     }
+   }

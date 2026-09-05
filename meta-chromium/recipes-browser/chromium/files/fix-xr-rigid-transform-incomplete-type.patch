@@ -1,20 +1,41 @@
+From d62ded09b25ac91954d191b39a378890cf415867 Mon Sep 17 00:00:00 2001
 From: Copilot <223556219+Copilot@users.noreply.github.com>
-Subject: [PATCH] Fix incomplete type error with XRRigidTransform destructor
+Date: Wed, 6 May 2026 16:34:53 +0100
+Subject: [PATCH] Define the XRRigidTransform destructor out of line
 
-Clang 20's libc++ requires complete types for unique_ptr destruction.
-Move the defaulted destructor from the header to the .cc file where
-gfx::Transform is fully defined.
+Define the destructor where gfx::Transform is complete so unique_ptr
+destruction does not require its definition in the header.
 
-Upstream-Status: Inappropriate [scarthgap backport compatibility]
+Refresh the existing scarthgap fix from meta-browser commit 85eeb6b5
+(fix-xr-rigid-transform-incomplete-type.patch) for Chromium 150.
+The original patch has no Date header; use its enclosing commit date.
+
+Upstream-Status: Inappropriate [scarthgap compiler compatibility]
 Signed-off-by: Caner Altinbasak <cal@brightsign.biz>
+Signed-off-by: Takuro Ashie <ashie@clear-code.com>
 ---
- .../renderer/modules/xr/xr_rigid_transform.cc   | 2 ++
- .../renderer/modules/xr/xr_rigid_transform.h    | 2 +-
+ third_party/blink/renderer/modules/xr/xr_rigid_transform.cc | 2 ++
+ third_party/blink/renderer/modules/xr/xr_rigid_transform.h  | 2 +-
  2 files changed, 3 insertions(+), 1 deletion(-)
 
+diff --git a/third_party/blink/renderer/modules/xr/xr_rigid_transform.cc b/third_party/blink/renderer/modules/xr/xr_rigid_transform.cc
+index d0a8cc6c47..5825a87e97 100644
+--- a/third_party/blink/renderer/modules/xr/xr_rigid_transform.cc
++++ b/third_party/blink/renderer/modules/xr/xr_rigid_transform.cc
+@@ -24,6 +24,8 @@ bool IsComponentValid(DOMPointInit* point) {
+          std::isfinite(point->z()) && std::isfinite(point->w());
+ }
+ }  // anonymous namespace
++ 
++XRRigidTransform::~XRRigidTransform() = default;
+ 
+ // makes a deep copy of transformationMatrix
+ XRRigidTransform::XRRigidTransform(const gfx::Transform& transformationMatrix)
+diff --git a/third_party/blink/renderer/modules/xr/xr_rigid_transform.h b/third_party/blink/renderer/modules/xr/xr_rigid_transform.h
+index 0049b98bc7..26f747505b 100644
 --- a/third_party/blink/renderer/modules/xr/xr_rigid_transform.h
 +++ b/third_party/blink/renderer/modules/xr/xr_rigid_transform.h
-@@ -37,7 +37,7 @@
+@@ -37,7 +37,7 @@ class MODULES_EXPORT XRRigidTransform : public ScriptWrappable {
    XRRigidTransform(const XRRigidTransform&) = delete;
    XRRigidTransform& operator=(const XRRigidTransform&) = delete;
  
@@ -23,14 +44,3 @@ Signed-off-by: Caner Altinbasak <cal@brightsign.biz>
  
    DOMPointReadOnly* position() const { return position_.Get(); }
    DOMPointReadOnly* orientation() const { return orientation_.Get(); }
---- a/third_party/blink/renderer/modules/xr/xr_rigid_transform.cc
-+++ b/third_party/blink/renderer/modules/xr/xr_rigid_transform.cc
-@@ -25,6 +25,8 @@
- }
- }  // anonymous namespace
- 
-+XRRigidTransform::~XRRigidTransform() = default;
-+
- // makes a deep copy of transformationMatrix
- XRRigidTransform::XRRigidTransform(const gfx::Transform& transformationMatrix)
-     : matrix_(std::make_unique<gfx::Transform>(transformationMatrix)) {

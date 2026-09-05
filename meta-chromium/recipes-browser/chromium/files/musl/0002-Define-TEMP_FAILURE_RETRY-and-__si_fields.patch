@@ -1,4 +1,4 @@
-From ba97f6ecfe7213dda439038e2fd0e0de9e943576 Mon Sep 17 00:00:00 2001
+From dd28c8c5ec102b8eb0fa4734d1b7d5ef5e4ef2a9 Mon Sep 17 00:00:00 2001
 From: Khem Raj <raj.khem@gmail.com>
 Date: Wed, 13 Feb 2019 09:51:14 -0800
 Subject: [PATCH] Define TEMP_FAILURE_RETRY and __si_fields
@@ -8,12 +8,13 @@ TEMP_FAILURE_RETRY is defined if its not already defined
 
 Upstream-Status: Pending
 Signed-off-by: Khem Raj <raj.khem@gmail.com>
-
 ---
  sandbox/linux/seccomp-bpf/trap.cc | 5 +++++
  sandbox/linux/suid/sandbox.c      | 9 +++++++++
  2 files changed, 14 insertions(+)
 
+diff --git a/sandbox/linux/seccomp-bpf/trap.cc b/sandbox/linux/seccomp-bpf/trap.cc
+index 212e80eecc..d92aae77e2 100644
 --- a/sandbox/linux/seccomp-bpf/trap.cc
 +++ b/sandbox/linux/seccomp-bpf/trap.cc
 @@ -27,6 +27,11 @@
@@ -27,10 +28,12 @@ Signed-off-by: Khem Raj <raj.khem@gmail.com>
 +
  namespace {
  
- struct arch_sigsys {
+ #if defined(SYS_SECCOMP)
+diff --git a/sandbox/linux/suid/sandbox.c b/sandbox/linux/suid/sandbox.c
+index 7ff1050def..f7371fff32 100644
 --- a/sandbox/linux/suid/sandbox.c
 +++ b/sandbox/linux/suid/sandbox.c
-@@ -44,6 +44,15 @@
+@@ -49,6 +49,15 @@
  
  static bool DropRoot();
  

@@ -1,4 +1,4 @@
-From cff680c18782f194bb8c0211e98f120aa518d418 Mon Sep 17 00:00:00 2001
+From 640e2b3a66b3a1cf37290a77446812104e73cf6a Mon Sep 17 00:00:00 2001
 From: Max Ihlenfeldt <max@igalia.com>
 Date: Tue, 16 Jan 2024 12:29:30 +0000
 Subject: [PATCH] Adjust the Rust build to our needs
@@ -19,30 +19,30 @@ Upstream-Status: Inappropriate [specific to our build setup]
 Co-authored-by: Caner Altinbasak <cal@brightsign.biz>
 Signed-off-by: Max Ihlenfeldt <max@igalia.com>
 ---
- build/config/rust.gni            | 28 ++++++++++++++++++----------
- ...ni_impl/filter_clang_args.py  |  5 +++++
- ...ni_impl/rustc_wrapper.py      |  1 +
- build/rust/std/BUILD.gn          | 28 +++++++++++++++++++++-------
- build/rust/std/find_std_rlibs.py | 16 +++++++++++-----
- 5 files changed, 56 insertions(+), 22 deletions(-)
+ build/config/rust.gni                    | 20 ++++++++++++----
+ build/rust/gni_impl/filter_clang_args.py |  5 ++++
+ build/rust/gni_impl/rustc_wrapper.py     |  1 +
+ build/rust/std/BUILD.gn                  | 29 +++++++++++++++++-------
+ build/rust/std/find_std_rlibs.py         | 16 +++++++++----
+ 5 files changed, 54 insertions(+), 17 deletions(-)
 
 diff --git a/build/config/rust.gni b/build/config/rust.gni
-index bd18d13..e260576 100644
+index 72565862a4..699f663c68 100644
 --- a/build/config/rust.gni
 +++ b/build/config/rust.gni
-@@ -121,6 +121,11 @@
-   # `fail_hard=False` when invoking `build_crubit.py` from
-   # `tools/rust/build_rust.py`).
-   enable_cpp_api_from_rust = false
-+
+@@ -94,6 +94,11 @@ declare_args() {
+   # escape sequences but it's not reliable in general.
+   force_rustc_color_output = false
+ 
 +  # Override the vendor part of the Rust target triple (with a leading dash)
 +  # used for building target code (not host code). Leave empty to use the
 +  # platform default.
 +  rust_target_triple_vendor_for_target = ""
- }
- 
- declare_args() {
-@@ -212,12 +217,19 @@
++
+   # Whether expansion of GN templates like `rust_static_library` automatically
+   # creates a target for invoking `clippy` against Rust sources.
+   #
+@@ -212,12 +217,19 @@ if (enable_rust) {
  # other toolchains.
  rust_abi_target = ""
  if (is_linux || is_chromeos) {
@@ -65,47 +65,17 @@ index bd18d13..e260576 100644
    } else if (current_cpu == "arm") {
      if (arm_float_abi == "hard") {
        float_suffix = "hf"
-@@ -225,31 +237,21 @@
-       float_suffix = ""
-     }
-     if (arm_arch == "armv7-a" || arm_arch == "armv7") {
--      # We have no way to inform Rust about the -a suffix, so we end up
--      # targeting armv7 in both cases.
--      #
--      # We also try to propagate the availability of NEON without feature
--      # detection; in C++ this is done by -mfpu=neon, but in Rust we need to
--      # use a different ABI target.
--      #
--      # The thumbv7 vs. armv7 distinction is for legacy reasons and both
--      # targets in fact target Thumb, see:
--      # https://github.com/rust-lang/rust/issues/44722
+@@ -235,7 +247,7 @@ if (is_linux || is_chromeos) {
+       # The thumbv7 vs. armv7 distinction is for legacy reasons and both
+       # targets in fact target Thumb, see:
+       # https://github.com/rust-lang/rust/issues/44722
 -      rust_abi_target = "thumbv7neon-unknown-linux-gnueabi" + float_suffix
 +      rust_abi_target = "armv7" + vendor + "-linux-gnueabi" + float_suffix
      } else {
--      rust_abi_target = "arm-unknown-linux-gnueabi" + float_suffix
-+      rust_abi_target = "arm" + vendor + "-linux-gnueabi" + float_suffix
+       rust_abi_target = "arm-unknown-linux-gnueabi" + float_suffix
      }
-   } else if (current_cpu == "riscv64") {
--    rust_abi_target = "riscv64gc-unknown-linux-gnu"
-+    rust_abi_target = "riscv64gc" + vendor + "-linux-gnu"
-   } else if (current_cpu == "ppc64") {
--    rust_abi_target = "powerpc64le-unknown-linux-gnu"
-+    rust_abi_target = "powerpc64le" + vendor + "-linux-gnu"
-   } else if (current_cpu == "s390x") {
--    rust_abi_target = "s390x-unknown-linux-gnu"
-+    rust_abi_target = "s390x" + vendor + "-linux-gnu"
-   } else if (current_cpu == "loong64") {
--    rust_abi_target = "loongarch64-unknown-linux-gnu"
-+    rust_abi_target = "loongarch64" + vendor + "-linux-gnu"
-   } else {
-     # Best guess for other future platforms.
--    rust_abi_target = current_cpu + "-unknown-linux-gnu"
-+    rust_abi_target = current_cpu + "" + vendor + "-linux-gnu"
-   }
- } else if (is_android) {
-   import("//build/config/android/abi.gni")
-diff --git a/build/rust/filter_clang_args.py b/build/rust/filter_clang_args.py
-index 5a1843c..7fb4b49 100644
+diff --git a/build/rust/gni_impl/filter_clang_args.py b/build/rust/gni_impl/filter_clang_args.py
+index ddbc35bcae..015b1a5255 100644
 --- a/build/rust/gni_impl/filter_clang_args.py
 +++ b/build/rust/gni_impl/filter_clang_args.py
 @@ -25,6 +25,11 @@ def filter_clang_args(clangargs):
@@ -117,14 +87,14 @@ index 5a1843c..7fb4b49 100644
 +        pass  # Skip this argument
 +      elif args[i].startswith('-mfpu='):
 +        pass
+       elif args[i] == '-ftime-trace':
+         pass
        else:
-         yield args[i]
-       i += 1
 diff --git a/build/rust/gni_impl/rustc_wrapper.py b/build/rust/gni_impl/rustc_wrapper.py
-index 8f2096d..de43d44 100755
+index f1f3276e61..3e12ace03d 100755
 --- a/build/rust/gni_impl/rustc_wrapper.py
 +++ b/build/rust/gni_impl/rustc_wrapper.py
-@@ -288,6 +288,7 @@ def main():
+@@ -355,6 +355,7 @@ def main():
    rustc_args = remaining_args[:ldflags_separator]
    ldflags = remaining_args[ldflags_separator + 1:rustenv_separator]
    rustenv = remaining_args[rustenv_separator + 1:sources_separator]
@@ -133,10 +103,18 @@ index 8f2096d..de43d44 100755
    abs_build_root = os.getcwd().replace('\\', '/') + '/'
    is_windows = sys.platform == 'win32' or args.target_windows
 diff --git a/build/rust/std/BUILD.gn b/build/rust/std/BUILD.gn
-index bb2c988..fdddf68 100644
+index 105a1d52a1..4c0361baf9 100644
 --- a/build/rust/std/BUILD.gn
 +++ b/build/rust/std/BUILD.gn
-@@ -171,7 +171,8 @@ if (toolchain_has_rust) {
+@@ -74,7 +74,6 @@ if (toolchain_has_rust) {
+   # don't need to pass to the C++ linker because they're used for specialized
+   # purposes.
+   skip_stdlib_files = [
+-    "profiler_builtins",
+     "rustc_std_workspace_alloc",
+     "rustc_std_workspace_core",
+     "rustc_std_workspace_std",
+@@ -166,7 +165,8 @@ if (toolchain_has_rust) {
    # our locally-built std. Both reside in root_out_dir: we must only have one of
    # each per GN toolchain anyway.
  
@@ -146,7 +124,7 @@ index bb2c988..fdddf68 100644
  
    if (!rust_prebuilt_stdlib) {
      local_rustc_sysroot = "$root_out_dir/local_rustc_sysroot"
-@@ -298,12 +299,12 @@ if (toolchain_has_rust) {
+@@ -309,12 +309,12 @@ if (toolchain_has_rust) {
          rust_abi_target,
        ]
  
@@ -162,7 +140,7 @@ index bb2c988..fdddf68 100644
        }
  
        visibility = [ ":*" ]
-@@ -316,8 +317,18 @@ if (toolchain_has_rust) {
+@@ -327,8 +327,18 @@ if (toolchain_has_rust) {
                   "enable_rust=false")
        deps = [ ":find_stdlib" ]
        sources = get_target_outputs(":find_stdlib")
@@ -183,7 +161,7 @@ index bb2c988..fdddf68 100644
  
        visibility = [ ":*" ]
      }
-@@ -357,7 +368,10 @@ if (toolchain_has_rust) {
+@@ -368,7 +378,10 @@ if (toolchain_has_rust) {
          ":prebuilt_stdlib_libs",
          ":stdlib_public_dependent_libs",
        ]
@@ -196,7 +174,7 @@ index bb2c988..fdddf68 100644
    }
  }
 diff --git a/build/rust/std/find_std_rlibs.py b/build/rust/std/find_std_rlibs.py
-index 386258f..e8fdaa9 100755
+index f35ae44820..06670e4b83 100755
 --- a/build/rust/std/find_std_rlibs.py
 +++ b/build/rust/std/find_std_rlibs.py
 @@ -17,7 +17,7 @@ import re

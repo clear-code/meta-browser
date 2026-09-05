@@ -17,7 +17,7 @@ diff --git a/components/viz/host/gpu_host_impl.cc b/components/viz/host/gpu_host
 index e37dd6bb11..27bf4bc8e7 100644
 --- a/components/viz/host/gpu_host_impl.cc
 +++ b/components/viz/host/gpu_host_impl.cc
-@@ -28,11 +28,13 @@
+@@ -27,11 +27,13 @@
  #include "gpu/config/gpu_info.h"
  #include "gpu/ipc/common/gpu_client_ids.h"
  #include "gpu/ipc/host/gpu_disk_cache.h"
@@ -34,4 +34,3 @@ index e37dd6bb11..27bf4bc8e7 100644
  #if BUILDFLAG(IS_ANDROID)
 -- 
 2.51.0
-

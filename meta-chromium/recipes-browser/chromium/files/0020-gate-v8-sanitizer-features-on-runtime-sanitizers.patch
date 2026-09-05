@@ -1,0 +1,85 @@
+From 1f78c92c6dea78932844a617329eaf55393b08ff Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Thu, 3 Sep 2026 09:16:15 +0900
+Subject: [PATCH] v8: handle sanitizer features with the scarthgap compiler
+
+The system compiler cannot use -fsanitize-ignore-for-ubsan-feature.
+Trap-only hardening can therefore enable sanitizer feature macros even
+when no sanitizer runtime is linked.
+
+Gate V8 sanitizer interfaces on Chromium runtime sanitizer builds and
+remove the array-bounds and return hardening configs from ordinary V8
+builds. Retain both parts of the existing scarthgap workaround.
+
+Upstream-Status: Inappropriate [scarthgap compiler compatibility]
+Signed-off-by: Takuro Ashie <ashie@clear-code.com>
+---
+ v8/BUILD.gn          | 3 +++
+ v8/gni/v8.gni        | 9 +++++++++
+ v8/src/base/macros.h | 6 +++---
+ 3 files changed, 15 insertions(+), 3 deletions(-)
+
+diff --git a/v8/BUILD.gn b/v8/BUILD.gn
+index f0d4e054a2..71e3ac0a5b 100644
+--- a/v8/BUILD.gn
++++ b/v8/BUILD.gn
+@@ -903,6 +903,9 @@ config("internal_config_base") {
+     include_dirs += [ "//third_party/compiler-rt/src/include" ]
+   }
+ 
++  if (using_sanitizer) {
++    defines = [ "V8_USE_SANITIZER" ]
++  }
+ }
+ 
+ config("internal_config") {
+diff --git a/v8/gni/v8.gni b/v8/gni/v8.gni
+index 6334faf2cb..5e1a87b659 100644
+--- a/v8/gni/v8.gni
++++ b/v8/gni/v8.gni
+@@ -395,6 +395,15 @@ v8_add_configs = [
+   v8_path_prefix + ":strict_warnings",
+ ]
+ 
++# The system Clang build does not provide the sanitizer runtime used by these
++# trap-only hardening configs. In particular, mksnapshot is executed during
++# the build, so a trap in it aborts snapshot generation under QEMU.
++if (is_clang && !using_sanitizer) {
++  v8_remove_configs += [
++    "//build/config/compiler:sanitize_c_array_bounds",
++    "//build/config/compiler:sanitize_return",
++  ]
++}
+ if (v8_force_optimize_speed) {
+   # Switch to force -O3 optimization regardless of platform or sanitizer
+   # usage.
+diff --git a/v8/src/base/macros.h b/v8/src/base/macros.h
+index 4355dec8f7..2839a02f21 100644
+--- a/v8/src/base/macros.h
++++ b/v8/src/base/macros.h
+@@ -202,7 +202,7 @@ V8_INLINE constexpr Dest bit_cast(Source const& source) noexcept {
+   void operator delete[](void*, size_t) { v8::base::OS::Abort(); }
+ 
+ // Define V8_USE_ADDRESS_SANITIZER macro.
+-#if defined(__has_feature)
++#if defined(V8_USE_SANITIZER) && defined(__has_feature)
+ #if __has_feature(address_sanitizer)
+ #define V8_USE_ADDRESS_SANITIZER 1
+ #endif
+@@ -216,14 +216,14 @@ V8_INLINE constexpr Dest bit_cast(Source const& source) noexcept {
+ #endif
+ 
+ // Define V8_USE_MEMORY_SANITIZER macro.
+-#if defined(__has_feature)
++#if defined(V8_USE_SANITIZER) && defined(__has_feature)
+ #if __has_feature(memory_sanitizer)
+ #define V8_USE_MEMORY_SANITIZER 1
+ #endif
+ #endif
+ 
+ // Define V8_USE_UNDEFINED_BEHAVIOR_SANITIZER macro.
+-#if defined(__has_feature)
++#if defined(V8_USE_SANITIZER) && defined(__has_feature)
+ #if __has_feature(undefined_behavior_sanitizer)
+ #define V8_USE_UNDEFINED_BEHAVIOR_SANITIZER 1
+ #endif

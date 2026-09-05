@@ -1,0 +1,28 @@
+From 64393b1cf16bd3a4844b3c3e8b755578fd5c475a Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Wed, 2 Sep 2026 11:36:35 +0900
+Subject: [PATCH] media: include logging declarations for video sandbox hook
+
+The Linux hardware video decoding sandbox hook uses LOG(ERROR), but the
+Chromium v150 source does not include the header that declares the logging
+macros.
+
+Origin: https://github.com/OSSystems/meta-browser/pull/1015
+Upstream-Status: Pending
+Signed-off-by: Takuro Ashie <ashie@clear-code.com>
+---
+ media/gpu/sandbox/hardware_video_decoding_sandbox_hook_linux.cc | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/media/gpu/sandbox/hardware_video_decoding_sandbox_hook_linux.cc b/media/gpu/sandbox/hardware_video_decoding_sandbox_hook_linux.cc
+index 58a9b95e81..6b26e3e4a9 100644
+--- a/media/gpu/sandbox/hardware_video_decoding_sandbox_hook_linux.cc
++++ b/media/gpu/sandbox/hardware_video_decoding_sandbox_hook_linux.cc
+@@ -7,6 +7,7 @@
+ #include <dlfcn.h>
+ #include <sys/stat.h>
+ 
++#include "base/logging.h"
+ #include "base/process/process_metrics.h"
+ #include "base/strings/stringprintf.h"
+ #include "build/build_config.h"
