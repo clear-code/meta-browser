@@ -1,0 +1,38 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Chromium meta-browser maintainers <meta-browser@lists.openembedded.org>
+Date: Sat, 5 Sep 2026 18:00:00 +0900
+Subject: [PATCH] v8: preserve registers in ARM64 ResetExcept with explicit removals
+
+CPURegList::Remove() already ignores NoCPUReg operands individually. Calling
+it directly avoids the outer NoReg checks in RegisterAllocator::ResetExcept().
+Those checks can cause the register-preservation code to be miscompiled by the
+older system Clang used by the scarthgap build environment. The resulting
+allocator state can cause a later Free() to call vector::erase(end()) while
+generating the ARM64 V8 snapshot under QEMU.
+
+This keeps the intended register-preservation semantics and does not disable
+the libc++ bounds check or the V8 trap.
+
+Upstream-Status: Inappropriate [OE-specific system compiler workaround]
+---
+ v8/src/builtins/arm64/builtins-arm64.cc | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/v8/src/builtins/arm64/builtins-arm64.cc b/v8/src/builtins/arm64/builtins-arm64.cc
+--- a/v8/src/builtins/arm64/builtins-arm64.cc
++++ b/v8/src/builtins/arm64/builtins-arm64.cc
+@@ -3680,10 +3680,6 @@ class RegisterAllocator {
+     available_ = initial_;
+-    if (reg1 != NoReg) {
+-      available_.Remove(reg1, reg2, reg3, reg4);
+-    }
+-    if (reg5 != NoReg) {
+-      available_.Remove(reg5, reg6);
+-    }
++    available_.Remove(reg1, reg2, reg3, reg4);
++    available_.Remove(reg5, reg6);
+     auto it = allocated_registers_.begin();
+     while (it != allocated_registers_.end()) {
+       if (available_.IncludesAliasOf(**it)) {
+--
+2.54.0
