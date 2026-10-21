@@ -26,6 +26,7 @@ SRC_URI += "\
     file://0005-avoid-link-latomic-failure-on-CentOS-8-host.patch \
     file://0007-Fix-constexpr-variable-must-be-initialized-by-a-cons.patch \
     file://0009-Adjust-the-Rust-build-to-our-needs.patch \
+    file://fix-rustc-inputs-for-custom-sysroot.patch \
     file://0011-fix-check_version-Only-compare-node.js-major-version.patch \
     file://0012-chromium-fix-v4l2-compiler-error-on-arm.patch \
     file://0013-Reduce-minimum-browser-window-width-to-480px.patch \
@@ -104,6 +105,7 @@ DEPENDS += " \
     qemu-native \
     rust-native \
     virtual/libgl \
+    bindgen-cli-native \
 "
 DEPENDS:append = " compiler-rt compiler-rt-native libcxx-native"
 DEPENDS:append:libc-musl = " libexecinfo"

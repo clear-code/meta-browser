@@ -1,0 +1,53 @@
+Subject: [PATCH] build: use the configured Rust sysroot for rustc inputs
+
+The commands already invoke rustc from rust_sysroot, but several Ninja
+input dependencies still point to the bundled toolchain. The lite source
+tarball omits that toolchain, so Ninja fails before running those commands.
+Use the same configured sysroot for the input dependencies.
+
+Upstream-Status: Pending
+
+diff --git a/build/config/rust.gni b/build/config/rust.gni
+--- a/build/config/rust.gni
++++ b/build/config/rust.gni
+@@ -445,7 +445,7 @@
+ ]
+ 
+ if (host_os == "win") {
+-  rustc_wrapper_inputs += [ "//third_party/rust-toolchain/bin/rustc.exe" ]
++  rustc_wrapper_inputs += [ "${rust_sysroot}/bin/rustc.exe" ]
+ } else {
+-  rustc_wrapper_inputs += [ "//third_party/rust-toolchain/bin/rustc" ]
+-}
++  rustc_wrapper_inputs += [ "${rust_sysroot}/bin/rustc" ]
++}
+diff --git a/build/rust/std/BUILD.gn b/build/rust/std/BUILD.gn
+--- a/build/rust/std/BUILD.gn
++++ b/build/rust/std/BUILD.gn
+@@ -269,9 +269,9 @@
+       out_depfile = rebase_path(depfile, root_build_dir)
+ 
+       if (host_os == "win") {
+-        inputs = [ "//third_party/rust-toolchain/bin/rustc.exe" ]
++        inputs = [ "${rust_sysroot}/bin/rustc.exe" ]
+       } else {
+-        inputs = [ "//third_party/rust-toolchain/bin/rustc" ]
++        inputs = [ "${rust_sysroot}/bin/rustc" ]
+       }
+ 
+       # For the rustc sysroot we must include even the rlibs we don't pass to
+diff --git a/build/rust/cargo_crate.gni b/build/rust/cargo_crate.gni
+--- a/build/rust/cargo_crate.gni
++++ b/build/rust/cargo_crate.gni
+@@ -464,9 +464,9 @@
+       ]
+ 
+       if (host_os == "win") {
+-        inputs += [ "//third_party/rust-toolchain/bin/rustc.exe" ]
++        inputs += [ "${rust_sysroot}/bin/rustc.exe" ]
+       } else {
+-        inputs += [ "//third_party/rust-toolchain/bin/rustc" ]
++        inputs += [ "${rust_sysroot}/bin/rustc" ]
+       }
+ 
+       build_script_target = ":${_build_script_name}($rust_macro_toolchain)"

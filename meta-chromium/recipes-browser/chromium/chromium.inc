@@ -3,8 +3,9 @@ HOMEPAGE = "https://www.chromium.org/Home"
 
 CVE_PRODUCT = "chromium:chromium google:chrome"
 
-SRC_URI = "https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${PV}.tar.xz"
-SRC_URI[sha256sum] = "b2332eb0f96b84e56b29959630a61d6e2c38bec54e6e4026ce20f12b3454ddda"
+SRC_URI = "https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${PV}-lite.tar.xz"
+SRC_URI[sha256sum] = "2f1ef6e396ee3c5f7b3876f902541e3344760a17f820691867f4bc3025dea17b"
+SRC_URI += "file://chromium-${PV}-lite-missing.tar.xz"
 S = "${WORKDIR}/chromium-${PV}"
 
 # GCC is not tested or officially supported upstream, and supporting it here
@@ -408,10 +409,6 @@ LIC_FILES_CHKSUM = "\
     file://${S}/third_party/catapult/third_party/redux/LICENSE.md;md5=a0e9a029c575a47069a637f579057679 \
     file://${S}/third_party/catapult/third_party/six/LICENSE;md5=43cfc9e4ac0e377acfb9b76f56b8415d \
     file://${S}/third_party/catapult/third_party/typ/LICENSE;md5=6c4db32a2fa8717faffa1d4f10136f47 \
-    file://${S}/third_party/catapult/third_party/vinn/third_party/v8/LICENSE;md5=4fbc731ec49a1773a0db52c6b0eabb87 \
-    file://${S}/third_party/catapult/third_party/vinn/third_party/v8/LICENSE.strongtalk;md5=956a43818dd13f2e93088fc2c93589d2 \
-    file://${S}/third_party/catapult/third_party/vinn/third_party/v8/LICENSE.v8;md5=1ea35644f0ec0d9767897115667e901f \
-    file://${S}/third_party/catapult/third_party/vinn/third_party/v8/LICENSE.valgrind;md5=df3b3d49700e781f7508895abd114277 \
     file://${S}/third_party/catapult/third_party/webapp2/LICENSE;md5=40b32c2af961e8ca20e66cdea65bcb36 \
     file://${S}/third_party/catapult/tracing/third_party/jpeg-js/LICENSE;md5=11ed819ab28c14377693b9c990511293 \
     file://${S}/third_party/catapult/tracing/third_party/jszip/LICENSE.markdown;md5=a90157b1fcb598898b3b75dc56a0c770 \
