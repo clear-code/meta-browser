@@ -1,20 +1,16 @@
-From effdc7f97311e8575276b2dcde4f5addbf26d6b9 Mon Sep 17 00:00:00 2001
+From d462e507f8c680f4b8a86f95bca40753f607b922 Mon Sep 17 00:00:00 2001
 From: Takuro Ashie <ashie@clear-code.com>
-Date: Tue, 1 Sep 2026 16:02:48 +0900
-Subject: [PATCH] devtools: use a callback for Node glob exclusions
+Date: Wed, 11 Nov 2026 14:51:02 +0900
+Subject: [PATCH 04/15] i18n: adapt string collection to Node glob exclude API
 
-Use a function-valued exclude option for fs.globSync() with the Node.js
-used by the scarthgap recipe. Preserve the existing exclusion patterns.
-
-Upstream-Status: Inappropriate [scarthgap Node.js compatibility]
-Signed-off-by: Takuro Ashie <ashie@clear-code.com>
+(cherry picked from commit aef0920aeca6b19e4268c23196c61de757953b51)
 ---
  .../src/front_end/core/i18n/collect-ui-strings.js          | 7 ++++++-
  .../src/third_party/i18n/collect-strings.js                | 7 ++++++-
  2 files changed, 12 insertions(+), 2 deletions(-)
 
 diff --git a/third_party/devtools-frontend/src/front_end/core/i18n/collect-ui-strings.js b/third_party/devtools-frontend/src/front_end/core/i18n/collect-ui-strings.js
-index 854e6b396f..4ded2b6192 100644
+index 854e6b396f..80466c69f5 100644
 --- a/third_party/devtools-frontend/src/front_end/core/i18n/collect-ui-strings.js
 +++ b/third_party/devtools-frontend/src/front_end/core/i18n/collect-ui-strings.js
 @@ -70,7 +70,12 @@ for (const directory of inputDirectories) {
@@ -22,17 +18,17 @@ index 854e6b396f..4ded2b6192 100644
    const fs = globSync('**/*.{js,ts,gn}', {
      cwd: directory,
 -    exclude: IGNORED_PATH_COMPONENTS,
-+    exclude: entry => {
-+      const components = entry.replaceAll('\\', '/').split('/');
++    exclude: filePath => {
++      const components = filePath.split(path.sep);
 +      return components.includes('.git') || components.includes('third_party') ||
 +          components.some(component => component.endsWith('_test_runner')) ||
-+          entry.endsWith('.test.ts');
++          filePath.endsWith('.test.ts');
 +    },
    });
    files.push(...fs.map(f => path.join(directory, f)));
  }
 diff --git a/third_party/devtools-frontend/src/third_party/i18n/collect-strings.js b/third_party/devtools-frontend/src/third_party/i18n/collect-strings.js
-index 4f586cf850..76e8213249 100644
+index 4f586cf850..2dd143cf1a 100644
 --- a/third_party/devtools-frontend/src/third_party/i18n/collect-strings.js
 +++ b/third_party/devtools-frontend/src/third_party/i18n/collect-strings.js
 @@ -649,7 +649,12 @@ export function collectAllStringsInDir(directory) {
@@ -40,11 +36,11 @@ index 4f586cf850..76e8213249 100644
    const files = fs.globSync('**/*.{js,ts}', {
      cwd: directory,
 -    exclude: IGNORED_PATH_COMPONENTS,
-+    exclude: entry => {
-+      const components = entry.replaceAll('\\', '/').split('/');
++    exclude: filePath => {
++      const components = filePath.split(path.sep);
 +      return components.includes('.git') || components.includes('third_party') ||
 +          components.some(component => component.endsWith('_test_runner')) ||
-+          entry.endsWith('.test.ts');
++          filePath.endsWith('.test.ts');
 +    },
    });
    for (const pathRelativeToDirectory of files) {

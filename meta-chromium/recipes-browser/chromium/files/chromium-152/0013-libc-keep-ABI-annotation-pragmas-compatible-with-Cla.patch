@@ -1,0 +1,24 @@
+From 388970e6fc3159db31e5771b878f561499007cab Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Tue, 17 Nov 2026 08:55:45 +0900
+Subject: [PATCH 13/15] libc++: keep ABI annotation pragmas compatible with
+ Clang 20
+
+---
+ third_party/libc++/src/include/__configuration/namespace.h | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/third_party/libc++/src/include/__configuration/namespace.h b/third_party/libc++/src/include/__configuration/namespace.h
+index 6b733e3076..ac6bc25d45 100644
+--- a/third_party/libc++/src/include/__configuration/namespace.h
++++ b/third_party/libc++/src/include/__configuration/namespace.h
+@@ -97,3 +97,9 @@
+ // clang-format on
+ 
+ #endif // _LIBCPP___CONFIGURATION_NAMESPACE_H
++#if defined(__clang__) && __clang_major__ < 21
++#  undef _LIBCPP_END_EXPLICIT_ABI_ANNOTATIONS
++#  undef _LIBCPP_BEGIN_EXPLICIT_ABI_ANNOTATIONS
++#  define _LIBCPP_END_EXPLICIT_ABI_ANNOTATIONS
++#  define _LIBCPP_BEGIN_EXPLICIT_ABI_ANNOTATIONS
++#endif

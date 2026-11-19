@@ -1,0 +1,83 @@
+From 0fc369c750235c5faf63b10d1928031caa7c69b9 Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Wed, 11 Nov 2026 22:59:17 +0900
+Subject: [PATCH 10/15] v8: gate sanitizer macros on runtime sanitizer builds
+
+(cherry picked from commit 0e09d502dcd1c9edeb5d600b99b00c6f15ba1f50)
+---
+ v8/BUILD.gn          | 3 +++
+ v8/gni/v8.gni        | 9 +++++++++
+ v8/src/base/macros.h | 8 ++++----
+ 3 files changed, 16 insertions(+), 4 deletions(-)
+
+diff --git a/v8/BUILD.gn b/v8/BUILD.gn
+index 94b9052e99..776cb6c1d7 100644
+--- a/v8/BUILD.gn
++++ b/v8/BUILD.gn
+@@ -935,6 +935,9 @@ config("internal_config_base") {
+ 
+ config("internal_config") {
+   defines = []
++  if (using_sanitizer) {
++    defines += [ "V8_USE_SANITIZER" ]
++  }
+ 
+   # Only targets in this file and its subdirs can depend on this.
+   visibility = [ "./*" ]
+diff --git a/v8/gni/v8.gni b/v8/gni/v8.gni
+index b0dc87c845..306ae77fdb 100644
+--- a/v8/gni/v8.gni
++++ b/v8/gni/v8.gni
+@@ -401,6 +401,15 @@ v8_add_configs = [
+   v8_path_prefix + ":strict_warnings",
+ ]
+ 
++# The scarthgap system compiler injects trap-only hardening without sanitizer
++# runtimes. Keep it out of V8 tools such as mksnapshot, which run during builds.
++if (is_clang && !using_sanitizer) {
++  v8_remove_configs += [
++    "//build/config/compiler:sanitize_c_array_bounds",
++    "//build/config/compiler:sanitize_return",
++  ]
++}
++
+ if (v8_force_optimize_speed) {
+   # Switch to force -O3 optimization regardless of platform or sanitizer
+   # usage.
+diff --git a/v8/src/base/macros.h b/v8/src/base/macros.h
+index c2c24e8229..d6dabe0fc6 100644
+--- a/v8/src/base/macros.h
++++ b/v8/src/base/macros.h
+@@ -202,28 +202,28 @@ V8_INLINE constexpr Dest bit_cast(Source const& source) noexcept {
+   void operator delete[](void*, size_t) { v8::base::OS::Abort(); }
+ 
+ // Define V8_USE_ADDRESS_SANITIZER macro.
+-#if defined(__has_feature)
++#if defined(V8_USE_SANITIZER) && defined(__has_feature)
+ #if __has_feature(address_sanitizer)
+ #define V8_USE_ADDRESS_SANITIZER 1
+ #endif
+ #endif
+ 
+ // Define V8_USE_HWADDRESS_SANITIZER macro.
+-#if defined(__has_feature)
++#if defined(V8_USE_SANITIZER) && defined(__has_feature)
+ #if __has_feature(hwaddress_sanitizer)
+ #define V8_USE_HWADDRESS_SANITIZER 1
+ #endif
+ #endif
+ 
+ // Define V8_USE_MEMORY_SANITIZER macro.
+-#if defined(__has_feature)
++#if defined(V8_USE_SANITIZER) && defined(__has_feature)
+ #if __has_feature(memory_sanitizer)
+ #define V8_USE_MEMORY_SANITIZER 1
+ #endif
+ #endif
+ 
+ // Define V8_USE_UNDEFINED_BEHAVIOR_SANITIZER macro.
+-#if defined(__has_feature)
++#if defined(V8_USE_SANITIZER) && defined(__has_feature)
+ #if __has_feature(undefined_behavior_sanitizer)
+ #define V8_USE_UNDEFINED_BEHAVIOR_SANITIZER 1
+ #endif

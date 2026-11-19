@@ -1,0 +1,26 @@
+From 945bc5d1fe3f80740037c825d9cd14612eac8b32 Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Wed, 11 Nov 2026 14:23:41 +0900
+Subject: [PATCH 03/15] node: support TypeScript scripts with Node 22
+
+(cherry picked from commit 1bb361947fbd3fe4758eada172d19350457db9f2)
+---
+ third_party/node/node.py | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/third_party/node/node.py b/third_party/node/node.py
+index 7e0d627d8c..99d0321245 100755
+--- a/third_party/node/node.py
++++ b/third_party/node/node.py
+@@ -25,7 +25,10 @@ def GetBinaryPath():
+ 
+ 
+ def RunNodeRaw(cmd_parts, stdout=None):
+-  cmd = [GetBinaryPath()] + cmd_parts
++  cmd = [GetBinaryPath()]
++  if cmd_parts and cmd_parts[0].endswith('.ts'):
++    cmd.append('--experimental-strip-types')
++  cmd.extend(cmd_parts)
+   process = subprocess.Popen(
+       cmd, cwd=os.getcwd(), stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+       universal_newlines=True, encoding='utf-8')

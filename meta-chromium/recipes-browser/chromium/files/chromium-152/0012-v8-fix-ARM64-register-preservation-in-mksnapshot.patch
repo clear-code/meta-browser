@@ -1,0 +1,29 @@
+From 9026aae91b1e06ab8eb248dc9219065fde8d0e8b Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Thu, 12 Nov 2026 11:40:07 +0900
+Subject: [PATCH 12/15] v8: fix ARM64 register preservation in mksnapshot
+
+(cherry picked from commit 1d11b76154f65bca1af2f3c3c023007463a41805)
+---
+ v8/src/builtins/arm64/builtins-arm64.cc | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
+
+diff --git a/v8/src/builtins/arm64/builtins-arm64.cc b/v8/src/builtins/arm64/builtins-arm64.cc
+index 26f396576f..487473363e 100644
+--- a/v8/src/builtins/arm64/builtins-arm64.cc
++++ b/v8/src/builtins/arm64/builtins-arm64.cc
+@@ -3708,12 +3708,8 @@ class RegisterAllocator {
+                    const Register& reg5 = NoReg,
+                    const Register& reg6 = NoReg) {
+     available_ = initial_;
+-    if (reg1 != NoReg) {
+-      available_.Remove(reg1, reg2, reg3, reg4);
+-    }
+-    if (reg5 != NoReg) {
+-      available_.Remove(reg5, reg6);
+-    }
++    available_.Remove(reg1, reg2, reg3, reg4);
++    available_.Remove(reg5, reg6);
+     auto it = allocated_registers_.begin();
+     while (it != allocated_registers_.end()) {
+       if (available_.IncludesAliasOf(**it)) {

@@ -14,7 +14,7 @@ TOOLCHAIN = "clang"
 
 # By default, clang.bbclass sets TOOLCHAIN:class-native to "gcc", but we want
 # to build the native recipes (e.g. GN) with clang too.
-TOOLCHAIN_NATIVE = "clang"
+TOOLCHAIN:class-native = "clang"
 
 # This makes the target build use libc++ and compiler_rt instead of the GNU
 # runtime, just like upstream does. The native binaries compiled and run as
@@ -55,7 +55,7 @@ DEPENDS += "python3-setuptools-native"
 # LICENSE does not cover all the licenses in LIC_FILES_CHKSUM; instead, it
 # currently contains Chromium's license (BSD-3-Clause) as well as Blink's
 # (LGPL2.0, LGPL2.1 and BSD-2-Clause).
-LICENSE = "BSD-3-Clause AND LGPL-2.0-or-later AND LGPL-2.1-or-later"
+LICENSE = "BSD-3-Clause & LGPL-2.0 & LGPL-2.1"
 
 # The generate_license_list.py script can help generate and update this list.
 LIC_FILES_CHKSUM = "\

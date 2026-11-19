@@ -1,7 +1,7 @@
-From 87d3ae3ac882042cdbc9d67a33390243aaa2f1fb Mon Sep 17 00:00:00 2001
+From a572ca74d3ed5ad09fde2e9ee42b104412e3fdf1 Mon Sep 17 00:00:00 2001
 From: Takuro Ashie <ashie@clear-code.com>
 Date: Tue, 1 Sep 2026 21:42:15 +0900
-Subject: [PATCH] v8: Add Chromium compiler-rt headers for Clang builds
+Subject: [PATCH 02/15] v8: Add Chromium compiler-rt headers for Clang builds
 
 The Yocto toolchain uses a system Clang, while V8 enables its sanitizer
 interfaces when sanitizer hardening flags are present. Unlike Chromium's
@@ -19,10 +19,10 @@ Signed-off-by: Takuro Ashie <ashie@clear-code.com>
  1 file changed, 4 insertions(+)
 
 diff --git a/v8/BUILD.gn b/v8/BUILD.gn
-index f606216b65..f0d4e054a2 100644
+index 39f578a9c8..94b9052e99 100644
 --- a/v8/BUILD.gn
 +++ b/v8/BUILD.gn
-@@ -899,6 +899,10 @@ config("internal_config_base") {
+@@ -927,6 +927,10 @@ config("internal_config_base") {
      "$target_gen_dir",
      "$target_gen_dir/include",
    ]

@@ -1,0 +1,30 @@
+From 72d7f405661557642ed570f744e1b6166d5b0b90 Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Wed, 11 Nov 2026 15:08:56 +0900
+Subject: [PATCH 05/15] devtools: support Node 22 main script detection
+
+(cherry picked from commit c292b36c4da588c7b266b7bfbaae76135e29e347)
+---
+ .../src/scripts/build/generate_css_js_files.js                 | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/third_party/devtools-frontend/src/scripts/build/generate_css_js_files.js b/third_party/devtools-frontend/src/scripts/build/generate_css_js_files.js
+index 463c9af53b..14177a68fa 100644
+--- a/third_party/devtools-frontend/src/scripts/build/generate_css_js_files.js
++++ b/third_party/devtools-frontend/src/scripts/build/generate_css_js_files.js
+@@ -5,6 +5,7 @@ import cssnano from 'cssnano';
+ import cssnanoPresetLite from 'cssnano-preset-lite';
+ import * as fs from 'node:fs';
+ import * as path from 'node:path';
++import {fileURLToPath} from 'node:url';
+ import postcss from 'postcss';
+ 
+ import {writeIfChanged} from './ninja/write-if-changed.js';
+@@ -80,6 +81,6 @@ async function runMain() {
+   );
+ }
+ 
+-if (import.meta.main) {
++if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+   runMain();
+ }

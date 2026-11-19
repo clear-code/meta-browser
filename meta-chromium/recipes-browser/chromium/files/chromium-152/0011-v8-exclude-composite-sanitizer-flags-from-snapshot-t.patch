@@ -1,0 +1,23 @@
+From f83226a6e81280128c57ffc8852e1406c4bb3c35 Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Thu, 12 Nov 2026 10:06:05 +0900
+Subject: [PATCH 11/15] v8: exclude composite sanitizer flags from snapshot
+ tools
+
+(cherry picked from commit cdbf2b7fc6d234dca6001a2d5f6c373782343c0e)
+---
+ v8/gni/v8.gni | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/v8/gni/v8.gni b/v8/gni/v8.gni
+index 306ae77fdb..251c34e9f2 100644
+--- a/v8/gni/v8.gni
++++ b/v8/gni/v8.gni
+@@ -407,6 +407,7 @@ if (is_clang && !using_sanitizer) {
+   v8_remove_configs += [
+     "//build/config/compiler:sanitize_c_array_bounds",
+     "//build/config/compiler:sanitize_return",
++    "//build/config/sanitizers:default_sanitizer_flags",
+   ]
+ }
+ 

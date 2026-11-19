@@ -1,18 +1,9 @@
-From 01d2252015952da0465f7e415816a0b6e508e31c Mon Sep 17 00:00:00 2001
-From: Copilot <223556219+Copilot@users.noreply.github.com>
-Date: Wed, 6 May 2026 16:34:53 +0100
-Subject: [PATCH] Avoid a Clang crash in the defaulted origin comparison
+From cc798bb15fb0440d66d005f293dccf0d05fe6240 Mon Sep 17 00:00:00 2001
+From: Takuro Ashie <ashie@clear-code.com>
+Date: Wed, 11 Nov 2026 18:26:35 +0900
+Subject: [PATCH 08/15] network: avoid Clang crash on defaulted equality
 
-Provide the explicit equality comparison already used by scarthgap
-instead of the out-of-class defaulted operator.
-
-Refresh the existing scarthgap fix from meta-browser commit 85eeb6b5
-(fix-clang20-defaulted-operator-crash.patch) for Chromium 150.
-The original patch has no Date header; use its enclosing commit date.
-
-Upstream-Status: Inappropriate [scarthgap compiler compatibility]
-Signed-off-by: Caner Altinbasak <cal@brightsign.biz>
-Signed-off-by: Takuro Ashie <ashie@clear-code.com>
+(cherry picked from commit 9f8dd3f794bee14b390094e1f00807f7b6b66dfd)
 ---
  .../cpp/permissions_policy/origin_with_possible_wildcards.cc  | 4 +++-
  1 file changed, 3 insertions(+), 1 deletion(-)

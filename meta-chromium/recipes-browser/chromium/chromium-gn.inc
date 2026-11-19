@@ -29,23 +29,25 @@ SRC_URI += "\
     file://0011-fix-check_version-Only-compare-node.js-major-version.patch \
     file://0012-chromium-fix-v4l2-compiler-error-on-arm.patch \
     file://0013-Reduce-minimum-browser-window-width-to-480px.patch \
-    file://0014-Remove-clang-options-unsupported-by-system-clang.patch \
-    file://0015-devtools-use-node-glob-exclude-callback.patch \
-    file://0016-devtools-declare-generated-css-tsconfig.patch \
-    file://0017-devtools-support-node-without-import-meta-main.patch \
-    file://0018-v8-add-compiler-rt-include-dir.patch \
-    file://fix-cpp26-octal-literals.patch \
-    file://fix-clang20-defaulted-operator-crash.patch \
-    file://0019-include-base-logging-for-video-sandbox-hook.patch \
-    file://fix-xr-rigid-transform-incomplete-type.patch \
-    file://0020-gate-v8-sanitizer-features-on-runtime-sanitizers.patch \
-    file://0021-v8-register-allocator-remove-no-regs-directly.patch \
+    file://chromium-152/0001-media-include-logging-for-video-sandbox-hook.patch \
+    file://chromium-152/0002-v8-Add-Chromium-compiler-rt-headers-for-Clang-builds.patch \
+    file://chromium-152/0003-node-support-TypeScript-scripts-with-Node-22.patch \
+    file://chromium-152/0004-i18n-adapt-string-collection-to-Node-glob-exclude-AP.patch \
+    file://chromium-152/0005-devtools-support-Node-22-main-script-detection.patch \
+    file://chromium-152/0006-devtools-support-Node-22-main-script-detection-for-A.patch \
+    file://chromium-152/0007-base-use-standard-octal-permission-literal.patch \
+    file://chromium-152/0008-network-avoid-Clang-crash-on-defaulted-equality.patch \
+    file://chromium-152/0009-blink-define-XR-transform-destructor-out-of-line.patch \
+    file://chromium-152/0010-v8-gate-sanitizer-macros-on-runtime-sanitizer-builds.patch \
+    file://chromium-152/0011-v8-exclude-composite-sanitizer-flags-from-snapshot-t.patch \
+    file://chromium-152/0012-v8-fix-ARM64-register-preservation-in-mksnapshot.patch \
+    file://chromium-152/0013-libc-keep-ABI-annotation-pragmas-compatible-with-Cla.patch \
+    file://chromium-152/0014-wayland-support-older-generated-keyboard-headers.patch \
+    file://chromium-152/0015-rust-skip-profiler-builtins-for-non-profiling-builds.patch \
     file://0001-Fix-building-gpu_host_impl.cc-on-Linux.patch \
     ${@ '' if rust_is_newer_than_190(d) else 'file://chromium-142-crabbyavif-rust18x.patch'} \
     file://fix-SYS_SECCOMP-redefinition.patch \
     file://chromium-145-zip_ffi_glue-use-edition2024.patch \
-    file://disable-sanitizer.patch \
-    file://chromium148-bytemuck-v1-remove-simd-LaneCount-usage.patch \
     file://rust-cbor.patch \
     file://0001-Replace-deprecated-max_value-with-MAX.patch;patchdir=third_party/rust/chromium_crates_io/vendor/qr_code-v2 \
 "
@@ -84,7 +86,7 @@ DEPENDS += " \
     expat \
     flac \
     glib-2.0 \
-    gn-native \
+    chromium-gn-native \
     gperf-native \
     gtk+3 \
     jpeg \
@@ -139,11 +141,6 @@ PACKAGECONFIG[use-egl] = ",,virtual/egl virtual/libgles2"
 # and command-line switches (extra dependencies should not
 # be necessary but are OK to add).
 PACKAGECONFIG[component-build] = ""
-
-#  As of Chromium 138, libc++ is required unconditionally.
-# https://docs.google.com/document/d/193ig0qeM23rK1yH6bW14O3zIgVztyKaY4R1XRwgmUFk/edit?usp=sharing
-# Force use_custom_libcxx=true as Chromium 138+ requires libc++
-GN_ARGS += "use_custom_libcxx=true"
 
 PACKAGECONFIG[cups] = "use_cups=true,use_cups=false,cups"
 PACKAGECONFIG[gtk4] = ""
